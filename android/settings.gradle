@@ -1,0 +1,4 @@
+rootProject.name = 'usb_camera_plugin'
+include ':libausbc'
+include ':libuvc'
+include ':libnative'
