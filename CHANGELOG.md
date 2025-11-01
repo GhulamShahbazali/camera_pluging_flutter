@@ -1,3 +1,12 @@
+## 0.0.4
+
+* **IMPORTANT**: Simplified plugin structure
+* Updated documentation to reflect current architecture limitations
+* Plugin now available for testing through example app
+* Removed complex source inclusion approach that caused compilation errors
+* **Recommendation**: Use the example app for testing USB camera functionality
+* Note: Full external project integration requires additional native module packaging work
+
 ## 0.0.3
 
 * **CRITICAL FIX**: Fixed "Project with path ':libausbc' could not be found" error

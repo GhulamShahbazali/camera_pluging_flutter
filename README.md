@@ -35,18 +35,34 @@ A Flutter plugin for accessing and controlling USB cameras on Android devices. T
 
 ## Installation
 
-Add this to your package's `pubspec.yaml` file:
+### ⚠️ Important Note
+
+**This plugin is currently in early development and has complex native dependencies. For now, it's recommended to run the example app for testing USB camera functionality.**
+
+To test the plugin:
+
+```bash
+# Clone the repository
+git clone https://github.com/teamtechackers/create_new_camara_plugin.git
+cd create_new_camara_plugin/example
+
+# Run the example app
+flutter pub get
+flutter run
+```
+
+### For Integration (Advanced)
+
+If you want to use this plugin in your own project (note: this requires additional setup due to native module dependencies):
 
 ```yaml
 dependencies:
-  usb_camera_plugin: ^0.0.1
+  usb_camera_plugin:
+    git:
+      url: https://github.com/teamtechackers/create_new_camara_plugin.git
 ```
 
-Then run:
-
-```bash
-flutter pub get
-```
+**Note:** Due to the complex architecture with multiple Android modules (libausbc, libuvc, libnative), this plugin currently works best when tested through the example app.
 
 ## Android Setup
 

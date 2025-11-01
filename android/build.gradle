@@ -58,12 +58,7 @@ android {
     }
 
     sourceSets {
-        main {
-            java.srcDirs += "src/main/kotlin"
-            // Include libausbc source code directly in the plugin
-            java.srcDirs += "libausbc/src/main/java"
-            res.srcDirs += "libausbc/src/main/res"
-        }
+        main.java.srcDirs += "src/main/kotlin"
         test.java.srcDirs += "src/test/kotlin"
     }
 
@@ -72,16 +67,7 @@ android {
     }
 
     dependencies {
-        // Use AAR files for native libraries instead of project dependencies
-        implementation files('libnative/aar/libnative-3.2.9.aar')
-        implementation files('libuvc/aar/libuvc-3.2.9.aar')
-        
-        // libausbc dependencies (source is included via sourceSets)
-        implementation 'androidx.appcompat:appcompat:1.3.1'
-        implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
-        implementation 'com.google.android.material:material:1.3.0'
-        implementation 'com.elvishew:xlog:1.11.0'
-        
+        // Minimal dependencies - plugin only provides bridge to native camera activity
         testImplementation("org.jetbrains.kotlin:kotlin-test")
         testImplementation("org.mockito:mockito-core:5.0.0")
     }
