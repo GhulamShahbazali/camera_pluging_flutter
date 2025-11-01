@@ -24,10 +24,14 @@ class UsbCameraPlugin: FlutterPlugin, MethodCallHandler, ActivityAware {
       "openCamera" -> {
         activity?.let {
           try {
-            // Launch plugin's CameraActivity which will open full camera
-            val intent = Intent(it, CameraActivity::class.java)
+            // 🎥 Direct camera launch - skip CameraActivity
+            val intent = Intent()
+            intent.setClassName(
+              "com.jiangdg.ausbc",  // Example app package
+              "com.jiangdg.demo.MainActivity"  // Full camera UI
+            )
             it.startActivity(intent)
-            result.success("Camera opened")
+            result.success("Camera opened directly")
           } catch (e: Exception) {
             result.error("ERROR", "Failed to open camera: ${e.message}", null)
           }
