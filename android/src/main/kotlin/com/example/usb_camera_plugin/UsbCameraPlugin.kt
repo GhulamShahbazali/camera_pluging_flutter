@@ -29,10 +29,25 @@ class UsbCameraPlugin: FlutterPlugin, MethodCallHandler, ActivityAware {
             val intent = Intent(it, clazz)
             it.startActivity(intent)
             result.success("Camera opened")
+          } catch (e: ClassNotFoundException) {
+            result.error(
+              "ERROR", 
+              "Camera activity not found. This plugin requires the example app to run properly. " +
+              "The camera functionality is only available in the example project. " +
+              "Please navigate to the example folder and run: flutter run",
+              mapOf(
+                "suggestion" to "Use example app",
+                "path" to "example/",
+                "missing_class" to className
+              )
+            )
           } catch (e: Exception) {
             result.error("ERROR", "Failed to open camera: ${e.message}", null)
           }
         } ?: result.error("ERROR", "Activity not available", null)
+      }
+      "getPlatformVersion" -> {
+        result.success("Android ${android.os.Build.VERSION.RELEASE}")
       }
       else -> result.notImplemented()
     }

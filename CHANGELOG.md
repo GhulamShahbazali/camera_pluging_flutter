@@ -1,3 +1,11 @@
+## 0.0.5
+
+* **IMPROVED ERROR HANDLING**: Better error messages when camera activity not found
+* Added helpful error message directing users to example app
+* Implemented getPlatformVersion method in Android plugin
+* Better exception handling in Dart API
+* Clear documentation in code about example app requirement
+
 ## 0.0.4
 
 * **IMPORTANT**: Simplified plugin structure
