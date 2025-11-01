@@ -67,8 +67,7 @@ android {
     }
 
     dependencies {
-        // Basic dependencies for camera activity
-        implementation 'androidx.appcompat:appcompat:1.3.1'
+        // No additional dependencies needed - using basic Android Activity
         testImplementation("org.jetbrains.kotlin:kotlin-test")
         testImplementation("org.mockito:mockito-core:5.0.0")
     }
