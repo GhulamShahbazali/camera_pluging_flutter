@@ -21,6 +21,10 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     super.initState();
     _initPlatformState();
+    // Auto-open camera after 1 second
+    Future.delayed(const Duration(seconds: 1), () {
+      _openCamera();
+    });
   }
 
   Future<void> _initPlatformState() async {
