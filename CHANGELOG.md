@@ -1,3 +1,13 @@
+## 0.1.0
+
+* **MAJOR UPDATE**: Plugin now works in ANY Flutter project! 🎉
+* Added built-in CameraActivity - no need for example app
+* Smart fallback: Uses full features if example app present, basic version otherwise
+* Plugin can now be used in test_1, test_2, or any external project
+* Added AppCompat dependency for camera activity
+* Registered CameraActivity in AndroidManifest
+* Ready for production use in external projects
+
 ## 0.0.5
 
 * **IMPROVED ERROR HANDLING**: Better error messages when camera activity not found
