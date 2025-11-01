@@ -10,13 +10,4 @@
   <uses-feature android:name="android.hardware.usb.host" />
   <uses-feature android:name="android.hardware.camera" android:required="false" />
   
-  <!-- Simple camera activity -->
-  
-  <application>
-    <activity
-      android:name="com.example.usb_camera_plugin.CameraActivity"
-      android:exported="false"
-      android:theme="@android:style/Theme.Material.Light.NoActionBar" />
-  </application>
-  
 </manifest>
