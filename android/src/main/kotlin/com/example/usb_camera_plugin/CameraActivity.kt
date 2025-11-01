@@ -36,12 +36,19 @@ class CameraActivity : Activity() {
         }
         
         val subtitle = TextView(this).apply {
-            text = "\n✅ Plugin Successfully Activated!\n\n" +
-                   "This demonstrates that the plugin is working " +
-                   "in your project.\n\n" +
-                   "For full USB camera features (recording, capture, effects), " +
-                   "check the example app."
-            textSize = 16f
+            text = "\n✅ Plugin Successfully Working!\n\n" +
+                   "📱 FULL CAMERA FEATURES:\n" +
+                   "The complete USB camera interface with recording, " +
+                   "capture, and effects is available in the example app.\n\n" +
+                   "🚀 TO USE FULL FEATURES:\n" +
+                   "1. cd camera_pluging_flutter_v1/example\n" +
+                   "2. flutter run\n\n" +
+                   "📦 OR INTEGRATE:\n" +
+                   "Copy example app's MainActivity and resources " +
+                   "into your project for full features.\n\n" +
+                   "This basic screen confirms the plugin " +
+                   "is properly installed and working."
+            textSize = 14f
             setTextColor(Color.WHITE)
             gravity = Gravity.CENTER
             setPadding(20, 20, 20, 20)
