@@ -1,6 +1,6 @@
 name: usb_camera_plugin
 description: "A Flutter plugin for accessing and controlling USB cameras on Android devices. Supports UVC cameras, video recording, image capture, and real-time preview with effects."
-version: 0.0.2
+version: 0.0.3
 homepage: https://github.com/teamtechackers/create_new_camara_plugin
 repository: https://github.com/teamtechackers/create_new_camara_plugin
 

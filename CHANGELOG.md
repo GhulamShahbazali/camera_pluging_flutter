@@ -1,3 +1,12 @@
+## 0.0.3
+
+* **CRITICAL FIX**: Fixed "Project with path ':libausbc' could not be found" error
+* Changed from project module dependencies to direct source inclusion
+* libausbc source code now included directly in the plugin via sourceSets
+* Using AAR files for libnative and libuvc instead of project dependencies
+* Plugin now works properly when used as a dependency in consumer projects
+* No more submodule resolution issues
+
 ## 0.0.2
 
 * **CRITICAL FIX**: Fixed gradle build configuration issue
