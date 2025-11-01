@@ -50,14 +50,12 @@ class MainActivity : AppCompatActivity() {
 //        replaceDemoFragment(GlSurfaceFragment())
     }
 
-    override fun onNewIntent(intent: Intent?) {
+    override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
         // Handle USB device attachment when activity is already running
-        intent?.let {
-            if (it.action == "android.hardware.usb.action.USB_DEVICE_ATTACHED") {
-                // USB device attached, refresh the current fragment if needed
-                Log.d("MainActivity", "USB device attached via onNewIntent")
-            }
+        if (intent.action == "android.hardware.usb.action.USB_DEVICE_ATTACHED") {
+            // USB device attached, refresh the current fragment if needed
+            Log.d("MainActivity", "USB device attached via onNewIntent")
         }
     }
 

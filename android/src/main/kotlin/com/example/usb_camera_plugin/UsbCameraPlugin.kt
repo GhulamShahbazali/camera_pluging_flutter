@@ -24,10 +24,14 @@ class UsbCameraPlugin: FlutterPlugin, MethodCallHandler, ActivityAware {
       "openCamera" -> {
         activity?.let {
           try {
-            // Launch simple camera activity
-            val intent = Intent(it, CameraActivity::class.java)
+            val intent = Intent()
+            // 👇 yahan plugin ke andar wali CameraActivity ka naam likhna hai
+            intent.setClassName(
+              "com.jiangdg.ausbc",  // JiangDG camera app ka package
+              "com.jiangdg.demo.MainActivity" // JiangDG camera app ki main Activity
+            )
             it.startActivity(intent)
-            result.success("Camera opened")
+            result.success("Camera opened successfully")
           } catch (e: Exception) {
             result.error("ERROR", "Failed to open camera: ${e.message}", null)
           }

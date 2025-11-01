@@ -10,6 +10,12 @@ class MockUsbCameraPluginPlatform
 
   @override
   Future<String?> getPlatformVersion() => Future.value('42');
+
+  @override
+  Future<void> openCamera() {
+    // TODO: implement openCamera
+    throw UnimplementedError();
+  }
 }
 
 void main() {
