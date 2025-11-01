@@ -22,9 +22,9 @@ class UsbCameraPlugin: FlutterPlugin, MethodCallHandler, ActivityAware {
   override fun onMethodCall(call: MethodCall, result: Result) {
     when (call.method) {
       "openCamera" -> {
+        val className = "com.jiangdg.demo.MainActivity"
         activity?.let {
           try {
-            val className = "com.jiangdg.demo.MainActivity"
             val clazz = Class.forName(className)
             val intent = Intent(it, clazz)
             it.startActivity(intent)
