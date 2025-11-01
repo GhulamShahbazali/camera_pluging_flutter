@@ -62,19 +62,109 @@ Then run:
 flutter pub get
 ```
 
-### 🎯 How It Works
+### 🎯 Two Ways to Use
 
-The plugin has two modes:
+**Choose based on your needs:**
 
-1. **Basic Mode**: Works in any Flutter project (test_1, test_2, your_app, etc.)
-   - Shows camera activation
-   - Demonstrates plugin integration
-   - Ready to extend with custom features
+#### **Option 1: Quick Integration** (5 minutes)
+Add plugin to any project for basic camera bridge functionality.
 
-2. **Full Features Mode**: Available when using the example app
-   - Complete USB camera implementation
-   - Video recording, photo capture
-   - Effects and advanced controls
+#### **Option 2: Full Features** (30 minutes) ⭐ RECOMMENDED
+Get complete camera UI in YOUR project with all features:
+- ✅ **USB Camera Detection** - Automatic device discovery
+- ✅ **Real-time Preview** - Multiple resolution support
+- ✅ **Video Recording** - H.264/MP4 format
+- ✅ **Photo Capture** - High-quality images
+- ✅ **Effects** - Black & White, Soul, Zoom, and more
+- ✅ **Audio Recording** - AAC audio support
+- ✅ **Settings & Controls** - Brightness, contrast, resolution
+- ✅ **Multi-camera Support** - Switch between cameras
+- ✅ **Professional UI** - Modern, intuitive interface
+
+**Works in YOUR project with simple setup!**
+
+---
+
+## 🚀 Quick Start for YOUR Project (test_1, test_2, etc.)
+
+### Step 1: Run Auto-Setup Script
+
+```bash
+cd /Users/apple/AndroidStudioProjects/camera_pluging_flutter_v1
+./setup_in_project.sh /Users/apple/AndroidStudioProjects/test_1
+```
+
+This copies all camera files to your project!
+
+### Step 2: Add to Your pubspec.yaml
+
+```yaml
+dependencies:
+  usb_camera_plugin:
+    path: ../camera_pluging_flutter_v1
+```
+
+### Step 3: Update Your build.gradle
+
+Add to `android/app/build.gradle`:
+
+```gradle
+android {
+    compileSdk 34
+    ndkVersion "27.0.12077973"
+    
+    defaultConfig {
+        minSdk 24
+        multiDexEnabled true
+    }
+    
+    buildFeatures {
+        viewBinding true
+        dataBinding true
+    }
+}
+
+dependencies {
+    // Camera dependencies
+    implementation 'com.afollestad.material-dialogs:core:3.2.1'
+    implementation 'com.geyifeng.immersionbar:immersionbar:3.2.2'
+    implementation 'com.github.bumptech.glide:glide:4.10.0'
+    implementation 'com.tencent:mmkv:1.2.12'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0'
+    implementation 'androidx.multidex:multidex:2.0.1'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.9'
+}
+```
+
+### Step 4: Update AndroidManifest
+
+Add to `android/app/src/main/AndroidManifest.xml`:
+
+```xml
+<activity
+    android:name="com.jiangdg.demo.MainActivity"
+    android:exported="false"
+    android:configChanges="orientation|keyboardHidden|keyboard|screenSize"
+    android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+```
+
+### Step 5: Use in Flutter!
+
+```dart
+import 'package:usb_camera_plugin/usb_camera_plugin.dart';
+
+ElevatedButton(
+  onPressed: () async {
+    await UsbCameraPlugin().openCamera();
+    // Full camera UI opens! 🎉
+  },
+  child: Text('Open Camera'),
+)
+```
+
+**Done!** Full camera features in YOUR app! 🚀
+
+📖 **Detailed guide:** See `HOW_TO_USE_WITH_YOUR_PROJECT.md`
 
 ### 🚀 Quick Start
 

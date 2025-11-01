@@ -67,7 +67,7 @@ android {
     }
 
     dependencies {
-        // No additional dependencies needed - using basic Android Activity
+        // Minimal dependencies - plugin provides simple integration
         testImplementation("org.jetbrains.kotlin:kotlin-test")
         testImplementation("org.mockito:mockito-core:5.0.0")
     }

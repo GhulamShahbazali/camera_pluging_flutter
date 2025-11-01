@@ -1,10 +1,27 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
   package="com.example.usb_camera_plugin">
   
+  <!-- Permissions will be merged into the app's manifest -->
+  <uses-permission android:name="android.permission.CAMERA" />
+  <uses-permission android:name="android.permission.RECORD_AUDIO" />
+  <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+  <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+  
+  <uses-feature android:name="android.hardware.usb.host" />
+  <uses-feature android:name="android.hardware.camera" android:required="false" />
+  
+  <!-- Note: MainActivity and other camera activities are not declared here to avoid conflicts.
+       They are provided as classes by the plugin and consuming apps can:
+       1. Use example app which already has MainActivity declared
+       2. Declare MainActivity in their own AndroidManifest for full features
+       3. Use the fallback CameraActivity (declared below) for basic functionality -->
+  
   <application>
+    <!-- Simple fallback camera activity - always available -->
     <activity
-      android:name=".CameraActivity"
+      android:name="com.example.usb_camera_plugin.CameraActivity"
       android:exported="false"
       android:theme="@android:style/Theme.Material.Light.NoActionBar" />
   </application>
+  
 </manifest>
