@@ -5,7 +5,7 @@ plugins {
 
 android {
 	namespace = "com.jiangdg.uvccamera"
-	compileSdkVersion rootProject.ext.versionCompiler
+	compileSdkVersion 34
 	
 	publishing {
 		singleVariant('release') {
@@ -14,14 +14,14 @@ android {
 	}
 
 	compileOptions {
-		sourceCompatibility rootProject.ext.javaSourceCompatibility
-		targetCompatibility rootProject.ext.javaTargetCompatibility
+		sourceCompatibility JavaVersion.VERSION_1_8
+		targetCompatibility JavaVersion.VERSION_1_8
 	}
 
 	defaultConfig {
-		minSdkVersion rootProject.ext.minSdkVersion
-		targetSdkVersion rootProject.ext.versionTarget
-		ndkVersion rootProject.ext.ndkVersion
+		minSdkVersion 24
+		targetSdkVersion 35
+		ndkVersion '27.0.12077973'
 
 		ndk {
 			// Exclude x86 and x86_64 until update libjpeg-turbo
@@ -54,7 +54,7 @@ android {
 
 dependencies {
 	implementation fileTree(dir: new File(buildDir, 'libs'), include: '*.jar')
-	implementation "androidx.appcompat:appcompat:${androidXVersion}"
+	implementation "androidx.appcompat:appcompat:1.3.1"
 	implementation 'com.elvishew:xlog:1.11.0'
 }
 
@@ -65,7 +65,7 @@ afterEvaluate {
                 from components.release
                 groupId = 'com.github.ernestp'
                 artifactId = 'libuvc'
-                version = rootProject.ext.versionNameString
+                version = '3.4.2'
             }
         }
     }

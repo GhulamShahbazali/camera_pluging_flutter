@@ -1,3 +1,11 @@
+## 0.0.2
+
+* **CRITICAL FIX**: Fixed gradle build configuration issue
+* Removed dependency on rootProject.ext properties that were causing build failures in consumer projects
+* All gradle files now use hardcoded values for compatibility
+* Fixed error: "Cannot get property 'versionCompiler' on extra properties extension as it does not exist"
+* Fixed error: "compileSdkVersion is not specified"
+
 ## 0.0.1
 
 * Initial release
