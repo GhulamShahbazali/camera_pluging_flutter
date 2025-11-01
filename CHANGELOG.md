@@ -1,3 +1,18 @@
+## 0.6.0 - Full Camera UI Integration
+
+* **🎉 BREAKTHROUGH UPDATE**: Plugin now opens full camera UI from example app!
+* Direct access to complete camera features via plugin button
+* **FULL FEATURES WORKING**:
+  - ✅ USB camera preview
+  - ✅ Video recording
+  - ✅ Photo capture
+  - ✅ Camera effects
+  - ✅ Settings
+  - ✅ Multi-camera support
+* Seamless integration with example app's MainActivity
+* No manual configuration needed
+* Button press directly launches full camera interface
+
 ## 0.5.0 - Stable Bridge Version
 
 * **PLUGIN AS BRIDGE**: Plugin provides integration point for camera features
