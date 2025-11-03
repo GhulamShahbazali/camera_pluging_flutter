@@ -2,10 +2,11 @@ import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../../core/controllers/base_controller.dart';
+
 import '../../../core/api/models/analysis_response.dart';
-import '../../../core/services/ultrascan_result_service.dart';
+import '../../../core/controllers/base_controller.dart';
 import '../../../core/controllers/selection_controller.dart';
+import '../../../core/services/ultrascan_result_service.dart';
 
 class ResultController extends BaseController {
   ResultController({required this.analysisResponse});
