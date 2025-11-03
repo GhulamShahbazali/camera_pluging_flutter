@@ -49,18 +49,40 @@ class ScanController extends GetxController with WidgetsBindingObserver {
   
   Future<void> _checkForCapturedImage() async {
     try {
+      if (kDebugMode) {
+        print('🔍 Checking for captured image...');
+      }
+      
       final imagePath = await _usbCameraPlugin.getLastCapturedImage();
+      
+      if (kDebugMode) {
+        print('📸 Image path received: $imagePath');
+      }
+      
       if (imagePath != null && imagePath.isNotEmpty) {
         // ✅ Image captured from camera!
-        selectedImage.value = File(imagePath);
-        if (kDebugMode) {
-          print('✅ Image captured: $imagePath');
+        final imageFile = File(imagePath);
+        
+        if (await imageFile.exists()) {
+          selectedImage.value = imageFile;
+          if (kDebugMode) {
+            print('✅ Image loaded successfully: $imagePath');
+            print('✅ File size: ${await imageFile.length()} bytes');
+          }
+          // Image will show automatically in your UI via Obx
+        } else {
+          if (kDebugMode) {
+            print('❌ Image file does not exist: $imagePath');
+          }
         }
-        // Image will show automatically in your UI via Obx
+      } else {
+        if (kDebugMode) {
+          print('⚠️ No image path found');
+        }
       }
     } catch (e) {
       if (kDebugMode) {
-        print('Error getting captured image: $e');
+        print('❌ Error getting captured image: $e');
       }
     }
   }
@@ -215,6 +237,19 @@ class ScanController extends GetxController with WidgetsBindingObserver {
   Future<void> _openCamera() async {
     try {
       await _usbCameraPlugin.openCamera();
+      
+      // Camera opened, now wait for it to close and check for image
+      // Check multiple times in case of timing issues
+      for (int i = 0; i < 10; i++) {
+        await Future.delayed(const Duration(milliseconds: 500));
+        await _checkForCapturedImage();
+        if (selectedImage.value != null) {
+          if (kDebugMode) {
+            print('✅ Image loaded after ${(i + 1) * 500}ms');
+          }
+          break;
+        }
+      }
     } catch (e) {
       if (kDebugMode) {
         print(e);
