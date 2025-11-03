@@ -153,16 +153,24 @@ class DemoFragment : CameraFragment(), View.OnClickListener, CaptureMediaView.On
 
     override fun initView() {
         super.initView()
-        mViewBinding.lensFacingBtn1.setOnClickListener(this)
-        mViewBinding.effectsBtn.setOnClickListener(this)
-        mViewBinding.cameraTypeBtn.setOnClickListener(this)
-        mViewBinding.settingsBtn.setOnClickListener(this)
-        mViewBinding.voiceBtn.setOnClickListener(this)
-        mViewBinding.resolutionBtn.setOnClickListener(this)
-        mViewBinding.albumPreviewIv.setOnClickListener(this)
+        
+        // ❌ Hide all buttons except capture
+        mViewBinding.lensFacingBtn1.visibility = View.GONE
+        mViewBinding.effectsBtn.visibility = View.GONE
+        mViewBinding.cameraTypeBtn.visibility = View.GONE
+        mViewBinding.settingsBtn.visibility = View.GONE
+        mViewBinding.voiceBtn.visibility = View.GONE
+        mViewBinding.resolutionBtn.visibility = View.GONE
+        mViewBinding.albumPreviewIv.visibility = View.GONE
+        mViewBinding.modeSwitchLayout.visibility = View.GONE
+        mViewBinding.toolbarGroup.visibility = View.GONE
+        mViewBinding.brightnessSb.visibility = View.GONE
+        
+        // ✅ Keep only capture button
         mViewBinding.captureBtn.setOnViewClickListener(this)
-        mViewBinding.albumPreviewIv.setTheme(PreviewImageView.Theme.DARK)
-        switchLayoutClick()
+        
+        // Force photo mode
+        mCameraMode = CaptureMediaView.CaptureMode.MODE_CAPTURE_PIC
     }
 
     override fun initData() {
@@ -422,22 +430,36 @@ class DemoFragment : CameraFragment(), View.OnClickListener, CaptureMediaView.On
     private fun captureImage() {
         captureImage(object : ICaptureCallBack {
             override fun onBegin() {
+                // Show capture animation
                 mTakePictureTipView.show("", 100)
-                mViewBinding.albumPreviewIv.showImageLoadProgress()
-                mViewBinding.albumPreviewIv.setNewImageFlag(true)
             }
 
             override fun onError(error: String?) {
-                ToastUtils.show(error ?: "未知异常")
-                mViewBinding.albumPreviewIv.cancelAnimation()
-                mViewBinding.albumPreviewIv.setNewImageFlag(false)
+                ToastUtils.show(error ?: "Capture failed")
             }
 
             override fun onComplete(path: String?) {
-                showRecentMedia(true)
-                mViewBinding.albumPreviewIv.setNewImageFlag(false)
+                // ✅ Image captured successfully!
+                // Show preview with tick/cancel buttons
+                path?.let {
+                    showImagePreview(it)
+                }
             }
         })
+    }
+    
+    private fun showImagePreview(imagePath: String) {
+        // TODO: Show image preview with Tick and Cancel buttons
+        // For now, just send to Flutter
+        sendImageToFlutter(imagePath)
+    }
+    
+    private fun sendImageToFlutter(imagePath: String) {
+        // Close camera activity and send result back
+        requireActivity().setResult(android.app.Activity.RESULT_OK, android.content.Intent().apply {
+            putExtra("image_path", imagePath)
+        })
+        requireActivity().finish()
     }
 
     override fun onDestroyView() {
