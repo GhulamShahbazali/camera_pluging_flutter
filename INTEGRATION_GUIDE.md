@@ -1,126 +1,169 @@
-# Full Camera Features Integration Guide
+# Integration Guide: Camera Image to Flutter
 
-## Want the complete camera UI in your project?
+## How to integrate captured image in your Flutter app
 
-The example app contains the full USB camera implementation with all features. Here's how to integrate it:
+### 1. Update your ScanController (or any controller):
 
-### Option A: Use Example App Directly (Easiest) ⭐
+```dart
+import 'package:usb_camera_plugin/usb_camera_plugin.dart';
 
-```bash
-cd /path/to/camera_pluging_flutter_v1/example
-flutter run
-```
-
-This gives you complete USB camera features out of the box.
-
----
-
-### Option B: Copy Features to Your Project (Advanced)
-
-If you want the full camera UI in test_1 or another project:
-
-#### Step 1: Copy Required Files
-
-**From `example/android/app/src/main/kotlin/jiangdg/demo/` to your project:**
-
-```
-MainActivity.kt
-DemoFragment.kt  
-DemoApplication.kt
-EffectListDialog.kt
-MultiCameraDialog.kt
-SplashActivity.kt
-```
-
-**Utils folder:**
-```
-MMKVUtils.kt
-imageloader/
-```
-
-#### Step 2: Copy Resources
-
-**From `example/android/app/src/main/res/` to your project:**
-
-```
-layout/
-  - activity_main.xml
-  - fragment_demo.xml
-  - dialog_effects.xml
-  - dialog_more.xml
-  - All other layout files
-
-drawable/
-  - All camera icons and images
-
-mipmap-xhdpi/
-  - Camera icons
-  - Filter images (filter0.jpg to filter6.jpg)
-
-values/
-  - colors.xml
-  - strings.xml
-  - themes.xml
-```
-
-#### Step 3: Add Dependencies
-
-Add to your `android/app/build.gradle`:
-
-```gradle
-dependencies {
-    // Camera plugin dependencies
-    implementation 'com.afollestad.material-dialogs:core:3.2.1'
-    implementation 'com.geyifeng.immersionbar:immersionbar:3.2.2'
-    implementation 'com.github.bumptech.glide:glide:4.10.0'
-    implementation 'com.tencent:mmkv:1.2.12'
-    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0'
-    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.2.0'
+class ScanController extends GetxController with WidgetsBindingObserver {
+  final _usbCameraPlugin = UsbCameraPlugin();
+  
+  @override
+  void onInit() {
+    super.onInit();
+    // Add observer to listen when app resumes
+    WidgetsBinding.instance.addObserver(this);
+  }
+  
+  @override
+  void onClose() {
+    // Remove observer
+    WidgetsBinding.instance.removeObserver(this);
+    super.onClose();
+  }
+  
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    // When app comes back from camera
+    if (state == AppLifecycleState.resumed) {
+      _checkForCapturedImage();
+    }
+  }
+  
+  Future<void> _checkForCapturedImage() async {
+    try {
+      final imagePath = await _usbCameraPlugin.getLastCapturedImage();
+      if (imagePath != null && imagePath.isNotEmpty) {
+        // ✅ Image captured! Show it
+        selectedImage.value = File(imagePath);
+        
+        // Optional: Navigate to result screen
+        // Get.toNamed(AppPages.resultPage);
+      }
+    } catch (e) {
+      print('Error getting image: $e');
+    }
+  }
+  
+  Future<void> _openCamera() async {
+    try {
+      await _usbCameraPlugin.openCamera();
+      // When user confirms in camera, app will resume
+      // and didChangeAppLifecycleState will be called
+    } catch (e) {
+      print('Error opening camera: $e');
+    }
+  }
 }
 ```
 
-#### Step 4: Update AndroidManifest
+### 2. In your widget:
 
-Add activities and permissions from example app's manifest.
-
-#### Step 5: Update Package Names
-
-Change all `com.jiangdg.demo` references to your project's package name.
-
----
-
-### Option C: Clone & Modify Example (Recommended)
-
-Instead of test_1, modify the example app directly:
-
-```bash
-# Make example app your main project
-cd camera_pluging_flutter_v1/example
-
-# Rename to your app name
-# Update package names
-# Customize as needed
-# Deploy!
+```dart
+class ScanScreen extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final controller = Get.find<ScanController>();
+    
+    return Scaffold(
+      body: Column(
+        children: [
+          // Show captured image if available
+          Obx(() {
+            if (controller.selectedImage.value != null) {
+              return Image.file(
+                controller.selectedImage.value!,
+                height: 300,
+                fit: BoxFit.cover,
+              );
+            }
+            return SizedBox(height: 300);
+          }),
+          
+          // Camera button
+          ElevatedButton(
+            onPressed: () => controller._openCamera(),
+            child: Text('Open Camera'),
+          ),
+        ],
+      ),
+    );
+  }
+}
 ```
 
----
+### 3. Flow:
 
-## Why This Complexity?
+```
+User presses button
+    ↓
+Camera opens
+    ↓
+User takes photo
+    ↓
+Preview shows (Tick/Cancel)
+    ↓
+User presses Tick (✓)
+    ↓
+Image saves to SharedPreferences
+    ↓
+Camera closes
+    ↓
+Flutter app resumes (didChangeAppLifecycleState)
+    ↓
+_checkForCapturedImage() called
+    ↓
+Image loaded to selectedImage
+    ↓
+UI updates automatically (Obx)
+    ↓
+Image displays! 🎉
+```
 
-The full camera implementation includes:
-- 1,000+ lines of camera logic
-- 30+ layout XML files  
-- 10+ third-party libraries
-- Custom fragments and activities
-- Resources (images, icons, themes)
+### 4. Your exact code update:
 
-It's a complete app, not just a simple plugin!
+Add these to your existing ScanController:
 
----
+```dart
+// Add this at class level
+@override
+void onInit() {
+  super.onInit();
+  _ensureMacAddress();
+  _initPlatformState();
+  WidgetsBinding.instance.addObserver(this); // ← ADD THIS
+}
 
-## Recommendation 🎯
+@override
+void onClose() {
+  WidgetsBinding.instance.removeObserver(this); // ← ADD THIS
+  super.onClose();
+}
 
-**Use the example app directly** or clone it as your starting point. It's fully functional and ready to use!
+// Add this method
+@override
+void didChangeAppLifecycleState(AppLifecycleState state) {
+  if (state == AppLifecycleState.resumed) {
+    _checkForCapturedImage();
+  }
+}
 
-For basic plugin integration testing, the current plugin (shows blue screen) is perfect to confirm it's working.
+// Add this method
+Future<void> _checkForCapturedImage() async {
+  try {
+    final imagePath = await _usbCameraPlugin.getLastCapturedImage();
+    if (imagePath != null && imagePath.isNotEmpty) {
+      selectedImage.value = File(imagePath);
+      // Image will automatically show in your UI via Obx
+    }
+  } catch (e) {
+    if (kDebugMode) {
+      print('Error getting captured image: $e');
+    }
+  }
+}
+```
 
+That's it! Your existing _openCamera() and UI will work automatically!

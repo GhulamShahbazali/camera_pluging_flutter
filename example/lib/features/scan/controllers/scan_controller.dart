@@ -14,7 +14,7 @@ import '../../../core/services/analysis_service.dart';
 import '../../../core/widgets/custom_snackbar.dart';
 import '../../../routes/app_pages.dart';
 
-class ScanController extends GetxController {
+class ScanController extends GetxController with WidgetsBindingObserver {
   final ImagePicker _picker = ImagePicker();
   final AnalysisService _analysisService = AnalysisService();
   final Rx<File?> selectedImage = Rx<File?>(null);
@@ -28,6 +28,41 @@ class ScanController extends GetxController {
     super.onInit();
     _ensureMacAddress();
     _initPlatformState();
+    // Add lifecycle observer to detect when camera closes
+    WidgetsBinding.instance.addObserver(this);
+  }
+  
+  @override
+  void onClose() {
+    // Remove lifecycle observer
+    WidgetsBinding.instance.removeObserver(this);
+    super.onClose();
+  }
+  
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    // When app resumes (comes back from camera)
+    if (state == AppLifecycleState.resumed) {
+      _checkForCapturedImage();
+    }
+  }
+  
+  Future<void> _checkForCapturedImage() async {
+    try {
+      final imagePath = await _usbCameraPlugin.getLastCapturedImage();
+      if (imagePath != null && imagePath.isNotEmpty) {
+        // ✅ Image captured from camera!
+        selectedImage.value = File(imagePath);
+        if (kDebugMode) {
+          print('✅ Image captured: $imagePath');
+        }
+        // Image will show automatically in your UI via Obx
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        print('Error getting captured image: $e');
+      }
+    }
   }
   Future<void> _initPlatformState() async {
     String platformVersion;
