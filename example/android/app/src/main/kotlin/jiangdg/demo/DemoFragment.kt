@@ -437,8 +437,8 @@ class DemoFragment : CameraFragment(), View.OnClickListener, CaptureMediaView.On
     private fun captureImage() {
         captureImage(object : ICaptureCallBack {
             override fun onBegin() {
-                // Show capture animation
-                mTakePictureTipView.show("", 100)
+                // Capture started
+                ToastUtils.show("Capturing...")
             }
 
             override fun onError(error: String?) {
@@ -448,8 +448,10 @@ class DemoFragment : CameraFragment(), View.OnClickListener, CaptureMediaView.On
             override fun onComplete(path: String?) {
                 // ✅ Image captured successfully!
                 // Show preview with tick/cancel buttons
-                path?.let {
-                    showImagePreview(it)
+                if (path != null && path.isNotEmpty()) {
+                    showImagePreview(path)
+                } else {
+                    ToastUtils.show("Image capture failed - no path")
                 }
             }
         })
