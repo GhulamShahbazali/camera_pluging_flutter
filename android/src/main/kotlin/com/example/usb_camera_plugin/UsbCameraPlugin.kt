@@ -20,6 +20,8 @@ class UsbCameraPlugin: FlutterPlugin, MethodCallHandler, ActivityAware {
   }
 
   override fun onMethodCall(call: MethodCall, result: Result) {
+    android.util.Log.d("UsbCameraPlugin", "📞 Method called: ${call.method}")
+    
     when (call.method) {
       "openCamera" -> {
         activity?.let {
@@ -41,13 +43,19 @@ class UsbCameraPlugin: FlutterPlugin, MethodCallHandler, ActivityAware {
         result.success("Android ${android.os.Build.VERSION.RELEASE}")
       }
       "getLastCapturedImage" -> {
+        android.util.Log.d("UsbCameraPlugin", "🖼️ Getting last captured image...")
         activity?.let {
           val prefs = it.getSharedPreferences("camera_prefs", android.content.Context.MODE_PRIVATE)
           val imagePath = prefs.getString("last_captured_image", null)
+          android.util.Log.d("UsbCameraPlugin", "📸 Image path from prefs: $imagePath")
           // Clear after reading
           prefs.edit().remove("last_captured_image").apply()
+          android.util.Log.d("UsbCameraPlugin", "✅ Returning path to Flutter: $imagePath")
           result.success(imagePath)
-        } ?: result.success(null)
+        } ?: run {
+          android.util.Log.d("UsbCameraPlugin", "❌ Activity is null")
+          result.success(null)
+        }
       }
       else -> result.notImplemented()
     }

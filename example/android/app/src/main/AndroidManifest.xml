@@ -37,6 +37,12 @@
             </intent-filter>
         </activity>
         <activity android:name=".CameraActivity" />
+        
+        <!-- Image Result Screen - Shows captured image -->
+        <activity 
+            android:name=".ImageResultActivity"
+            android:exported="false"
+            android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen" />
 
         <!-- USB Camera MainActivity from AndroidUSBCamera2025 -->
         <activity
