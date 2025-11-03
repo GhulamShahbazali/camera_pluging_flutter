@@ -12,6 +12,8 @@ class MainActivity : FlutterActivity() {
         super.configureFlutterEngine(flutterEngine)
         
         MethodChannel(flutterEngine.dartExecutor.binaryMessenger, CHANNEL).setMethodCallHandler { call, result ->
+            android.util.Log.d("MainActivity", "📞 Method called: ${call.method}")
+            
             when (call.method) {
                 "openCamera" -> {
                     try {
@@ -21,6 +23,15 @@ class MainActivity : FlutterActivity() {
                     } catch (e: Exception) {
                         result.error("ERROR", e.message, null)
                     }
+                }
+                "getLastCapturedImage" -> {
+                    // ✅ Get from ImageHolder
+                    val imagePath = ImageHolder.getImagePath()
+                    android.util.Log.d("MainActivity", "📸 Returning image: $imagePath")
+                    result.success(imagePath)
+                }
+                "getPlatformVersion" -> {
+                    result.success("Android ${android.os.Build.VERSION.RELEASE}")
                 }
                 else -> result.notImplemented()
             }

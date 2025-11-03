@@ -577,11 +577,10 @@ class DemoFragment : CameraFragment(), View.OnClickListener, CaptureMediaView.On
     }
     
     private fun sendImageToFlutter(imagePath: String) {
-        // Save image path for Flutter to retrieve
-        val prefs = requireActivity().getSharedPreferences("camera_prefs", android.content.Context.MODE_PRIVATE)
-        prefs.edit().putString("last_captured_image", imagePath).apply()
+        // Save to ImageHolder singleton (same app)
+        com.example.usb_camera_plugin_example.ImageHolder.setImagePath(imagePath)
         
-        android.util.Log.d("DemoFragment", "✅ Saved image path: $imagePath")
+        android.util.Log.d("DemoFragment", "✅ Saved image path to ImageHolder: $imagePath")
         
         // Close camera and return to Flutter
         requireActivity().finish()
