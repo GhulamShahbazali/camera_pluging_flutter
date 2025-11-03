@@ -26,4 +26,10 @@ class UsbCameraPlugin {
   Future<String?> getPlatformVersion() {
     return UsbCameraPluginPlatform.instance.getPlatformVersion();
   }
+  
+  /// Gets the last captured image path from camera
+  /// Returns null if no image was captured
+  Future<String?> getLastCapturedImage() {
+    return UsbCameraPluginPlatform.instance.getLastCapturedImage();
+  }
 }

@@ -23,4 +23,8 @@ abstract class UsbCameraPluginPlatform extends PlatformInterface {
   Future<String?> getPlatformVersion() {
     throw UnimplementedError('getPlatformVersion() has not been implemented.');
   }
+  
+  Future<String?> getLastCapturedImage() {
+    throw UnimplementedError('getLastCapturedImage() has not been implemented.');
+  }
 }

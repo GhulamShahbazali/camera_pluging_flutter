@@ -150,6 +150,13 @@ class DemoFragment : CameraFragment(), View.OnClickListener, CaptureMediaView.On
     private var mCameraMode = CaptureMediaView.CaptureMode.MODE_CAPTURE_PIC
 
     private lateinit var mViewBinding: FragmentDemoBinding
+    
+    // Image preview overlay
+    private var mPreviewOverlay: ViewGroup? = null
+    private var mCapturedImageView: android.widget.ImageView? = null
+    private var mConfirmButton: android.widget.Button? = null
+    private var mCancelButton: android.widget.Button? = null
+    private var mCapturedImagePath: String? = null
 
     override fun initView() {
         super.initView()
@@ -449,16 +456,130 @@ class DemoFragment : CameraFragment(), View.OnClickListener, CaptureMediaView.On
     }
     
     private fun showImagePreview(imagePath: String) {
-        // TODO: Show image preview with Tick and Cancel buttons
-        // For now, just send to Flutter
-        sendImageToFlutter(imagePath)
+        mCapturedImagePath = imagePath
+        
+        // Create preview overlay if not exists
+        if (mPreviewOverlay == null) {
+            createPreviewOverlay()
+        }
+        
+        // Load captured image
+        try {
+            val bitmap = android.graphics.BitmapFactory.decodeFile(imagePath)
+            mCapturedImageView?.setImageBitmap(bitmap)
+            mPreviewOverlay?.visibility = View.VISIBLE
+            
+            // Hide capture button
+            mViewBinding.captureBtn.visibility = View.GONE
+        } catch (e: Exception) {
+            ToastUtils.show("Failed to load image: ${e.message}")
+            hideImagePreview()
+        }
+    }
+    
+    private fun createPreviewOverlay() {
+        val context = requireContext()
+        
+        // Create overlay container
+        mPreviewOverlay = android.widget.FrameLayout(context).apply {
+            layoutParams = ViewGroup.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.MATCH_PARENT
+            )
+            setBackgroundColor(0xFF000000.toInt())
+            visibility = View.GONE
+        }
+        
+        // Create ImageView for preview
+        mCapturedImageView = android.widget.ImageView(context).apply {
+            layoutParams = ViewGroup.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.MATCH_PARENT
+            )
+            scaleType = android.widget.ImageView.ScaleType.FIT_CENTER
+        }
+        
+        // Create buttons container
+        val buttonsContainer = android.widget.LinearLayout(context).apply {
+            layoutParams = android.widget.FrameLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT
+            ).apply {
+                gravity = android.view.Gravity.BOTTOM
+                setMargins(
+                    Utils.dp2px(context, 32F),
+                    Utils.dp2px(context, 32F),
+                    Utils.dp2px(context, 32F),
+                    Utils.dp2px(context, 32F)
+                )
+            }
+            orientation = android.widget.LinearLayout.HORIZONTAL
+            gravity = android.view.Gravity.CENTER
+        }
+        
+        // Cancel button
+        mCancelButton = android.widget.Button(context).apply {
+            layoutParams = android.widget.LinearLayout.LayoutParams(
+                0,
+                Utils.dp2px(context, 56F)
+            ).apply {
+                weight = 1f
+                marginEnd = Utils.dp2px(context, 16F)
+            }
+            text = "✕ Cancel"
+            textSize = 16f
+            setTextColor(0xFFFFFFFF.toInt())
+            setBackgroundColor(0x66000000.toInt())
+            setOnClickListener {
+                hideImagePreview()
+                // Retake - show capture button again
+                mViewBinding.captureBtn.visibility = View.VISIBLE
+            }
+        }
+        
+        // Confirm button
+        mConfirmButton = android.widget.Button(context).apply {
+            layoutParams = android.widget.LinearLayout.LayoutParams(
+                0,
+                Utils.dp2px(context, 56F)
+            ).apply {
+                weight = 1f
+                marginStart = Utils.dp2px(context, 16F)
+            }
+            text = "✓ Confirm"
+            textSize = 16f
+            setTextColor(0xFFFFFFFF.toInt())
+            setBackgroundColor(0xFF4CAF50.toInt())
+            setOnClickListener {
+                mCapturedImagePath?.let { path ->
+                    sendImageToFlutter(path)
+                }
+            }
+        }
+        
+        // Add buttons to container
+        buttonsContainer.addView(mCancelButton)
+        buttonsContainer.addView(mConfirmButton)
+        
+        // Add views to overlay
+        mPreviewOverlay?.addView(mCapturedImageView)
+        mPreviewOverlay?.addView(buttonsContainer)
+        
+        // Add overlay to root view
+        (mViewBinding.root as? ViewGroup)?.addView(mPreviewOverlay)
+    }
+    
+    private fun hideImagePreview() {
+        mPreviewOverlay?.visibility = View.GONE
+        mCapturedImagePath = null
     }
     
     private fun sendImageToFlutter(imagePath: String) {
-        // Close camera activity and send result back
-        requireActivity().setResult(android.app.Activity.RESULT_OK, android.content.Intent().apply {
-            putExtra("image_path", imagePath)
-        })
+        // Save image path to SharedPreferences
+        val prefs = requireActivity().getSharedPreferences("camera_prefs", android.content.Context.MODE_PRIVATE)
+        prefs.edit().putString("last_captured_image", imagePath).apply()
+        
+        // Close camera activity
         requireActivity().finish()
     }
 

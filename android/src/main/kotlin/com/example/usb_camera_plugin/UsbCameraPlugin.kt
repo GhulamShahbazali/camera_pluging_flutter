@@ -40,6 +40,15 @@ class UsbCameraPlugin: FlutterPlugin, MethodCallHandler, ActivityAware {
       "getPlatformVersion" -> {
         result.success("Android ${android.os.Build.VERSION.RELEASE}")
       }
+      "getLastCapturedImage" -> {
+        activity?.let {
+          val prefs = it.getSharedPreferences("camera_prefs", android.content.Context.MODE_PRIVATE)
+          val imagePath = prefs.getString("last_captured_image", null)
+          // Clear after reading
+          prefs.edit().remove("last_captured_image").apply()
+          result.success(imagePath)
+        } ?: result.success(null)
+      }
       else -> result.notImplemented()
     }
   }
