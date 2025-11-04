@@ -70,15 +70,8 @@ class ScanController extends GetxController with WidgetsBindingObserver {
           }
           
           // Navigate to captured image screen
-          final result = await Get.toNamed('/captured-image', arguments: imagePath);
-          
-          // If user pressed "Use Image", save it
-          if (result != null) {
-            selectedImage.value = imageFile;
-            if (kDebugMode) {
-              print('✅ Image saved to selectedImage');
-            }
-          }
+          // (Image will be auto-analyzed from there)
+          await Get.toNamed('/captured-image', arguments: imagePath);
         } else {
           if (kDebugMode) {
             print('❌ Image file does not exist: $imagePath');
