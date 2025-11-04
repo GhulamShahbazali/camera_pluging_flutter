@@ -69,9 +69,12 @@ class ScanController extends GetxController with WidgetsBindingObserver {
             print('✅ File size: ${await imageFile.length()} bytes');
           }
           
-          // Navigate to captured image screen
-          // (Image will be auto-analyzed from there)
-          await Get.toNamed('/captured-image', arguments: imagePath);
+          // ✅ Set image directly - User will click Analyze button manually
+          selectedImage.value = imageFile;
+          
+          if (kDebugMode) {
+            print('✅ Image set to selectedImage - Ready for analysis');
+          }
         } else {
           if (kDebugMode) {
             print('❌ Image file does not exist: $imagePath');
