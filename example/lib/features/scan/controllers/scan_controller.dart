@@ -17,7 +17,7 @@ import '../../../routes/app_pages.dart';
 class ScanController extends GetxController with WidgetsBindingObserver {
   final ImagePicker _picker = ImagePicker();
   final AnalysisService _analysisService = AnalysisService();
-  final Rx<File?> selectedImage = Rx<File?>(null);
+  late final Rx<File?> selectedImage = Rx<File?>(null);
   final RxBool isLoading = false.obs;
   final _usbCameraPlugin = UsbCameraPlugin();
 

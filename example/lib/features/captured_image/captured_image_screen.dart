@@ -19,7 +19,6 @@ class CapturedImageScreen extends StatelessWidget {
       body: SafeArea(
         child: Column(
           children: [
-            // Top bar with title
             Padding(
               padding: const EdgeInsets.all(16.0),
               child: Row(

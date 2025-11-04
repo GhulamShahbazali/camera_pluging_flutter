@@ -30,11 +30,21 @@ class ResultPage extends StatelessWidget {
           child: Column(
             children: [
               const SizedBox(height: 50),
-              const Align(
-                alignment: Alignment.topRight,
-                child: Padding(
-                  padding: EdgeInsets.only(right: 18),
-                  child: SettingIconWidget(),
+              Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                     SettingIconWidget(
+                       haveArrowIcon: true,
+                       onTap: () {
+                         Get.back();
+                         Get.back();
+                       },
+                     ),
+                     SettingIconWidget(),
+
+                  ],
                 ),
               ),
 
