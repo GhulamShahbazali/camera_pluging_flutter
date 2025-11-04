@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'dart:io';
 import 'package:usb_camera_plugin/usb_camera_plugin.dart';
-import 'captured_image_screen.dart';
+import 'features/captured_image/captured_image_screen.dart';
 
 void main() {
   runApp(const MyApp());
