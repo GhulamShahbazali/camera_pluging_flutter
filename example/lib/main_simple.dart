@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'dart:io';
 import 'package:usb_camera_plugin/usb_camera_plugin.dart';
-import 'features/captured_image/captured_image_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -67,7 +66,10 @@ class _CameraHomePageState extends State<CameraHomePage> with WidgetsBindingObse
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => CapturedImageScreen(imagePath: imagePath),
+              builder: (context) {
+                return CapturedImageScreen(imagePath: imagePath);
+
+              },
             ),
           );
         }

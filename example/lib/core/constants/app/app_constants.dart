@@ -9,6 +9,6 @@ class AppConstants {
   static const int receiveTimeout = 30; // seconds
 
   // App configuration
-  static const String appName = 'UltraScan 4d';
+  static const String appName = 'UltraScan 4D';
   static const String appVersion = '1.0.0';
 }
