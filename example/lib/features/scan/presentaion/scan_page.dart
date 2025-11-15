@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 
+
 import '../../../core/constants/app/app_assets.dart';
 import '../../../core/widgets/background_container.dart';
 import '../../../core/widgets/setting_icon.dart';
@@ -49,28 +50,21 @@ class ScanPage extends StatelessWidget {
                     SizedBox(
                       height: size.height * 0.725,
                       width: size.width,
+                      // color: Colors.white,
                       child: Image.file(
                         File(controller.selectedImage.value!.path),
-                        fit: BoxFit.cover,
-                        errorBuilder: (context, error, stackTrace) {
-                          return const Center(child: Text('Image load error'));
-                        },
+                        fit: BoxFit.fill,
                       ),
                     ),
                   const SizedBox(height: 30),
                 ],
               ),
             ),
-            // Loading overlay
             if (controller.isLoading.value)
-              Positioned.fill(
-                child: ColoredBox(
-                  color: Colors.black.withAlpha(110),
-                  child: const Center(
-                    child: CircularProgressIndicator(
-                      color: Colors.white,
-                    ),
-                  ),
+              ColoredBox(
+                color: Colors.black.withValues(alpha: 0.45),
+                child: const Center(
+                  child: CircularProgressIndicator(color: Colors.white),
                 ),
               ),
           ],
@@ -82,9 +76,13 @@ class ScanPage extends StatelessWidget {
           width: size.width * 0.35,
           icon: AppAssets.scanIcon,
           title: 'analyze_with_ai'.tr,
-          onTap: controller.isLoading.value ? null : controller.analyzeSelectedImage,
+          onTap: controller.isLoading.value
+              ? null
+              : controller.analyzeSelectedImage,
         ),
       ),
     );
   }
 }
+
+
