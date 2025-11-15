@@ -1,15 +1,15 @@
 // ignore_for_file: eol_at_end_of_file, document_ignores
 
+import 'dart:async';
 import 'dart:developer';
 import 'dart:io';
-import 'package:get/get.dart';
-import 'package:flutter/material.dart';
+
 import 'package:flutter/foundation.dart' show kDebugMode;
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
-
 import 'package:shared_preferences/shared_preferences.dart';
-
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter_exif_rotation/flutter_exif_rotation.dart';
 import 'package:usb_camera_plugin/usb_camera_plugin.dart';
@@ -18,7 +18,7 @@ import '../../../core/services/analysis_service.dart';
 import '../../../core/widgets/custom_snackbar.dart';
 import '../../../routes/app_pages.dart';
 
-class ScanController extends GetxController  with WidgetsBindingObserver{
+class ScanController extends GetxController with WidgetsBindingObserver {
   final ImagePicker _picker = ImagePicker();
   final AnalysisService _analysisService = Get.put(AnalysisService());
 
@@ -27,27 +27,33 @@ class ScanController extends GetxController  with WidgetsBindingObserver{
 
   static const String _macAddressKey = 'saved_mac_address';
   final _usbCameraPlugin = UsbCameraPlugin();
+
+  Timer? _cameraPollTimer;
+
   @override
   void onInit() {
     super.onInit();
-    _initPlatformState();
+    // avoid heavy initialization that might auto-open camera in some devices
+    // _initPlatformState(); // removed / optional
     _ensureMacAddress();
-    WidgetsBinding.instance.addObserver(this as WidgetsBindingObserver);
-  }
-  @override
-  void onClose() {
-    // Remove lifecycle observer
-    WidgetsBinding.instance.removeObserver(this as WidgetsBindingObserver);
-    super.onClose();
+    WidgetsBinding.instance.addObserver(this);
   }
 
   @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    // When app resumes (comes back from camera)
-    if (state == AppLifecycleState.resumed) {
-      _checkForCapturedImage();
-    }
+  void onClose() {
+    _cameraPollTimer?.cancel();
+    WidgetsBinding.instance.removeObserver(this);
+    super.onClose();
   }
+
+  // @override
+  // void didChangeAppLifecycleState(AppLifecycleState state) {
+  //   // When app resumes (comes back from camera) check once
+  //   if (state == AppLifecycleState.resumed) {
+  //     _checkForCapturedImage();
+  //   }
+  // }
+
   Future<void> _ensureMacAddress() async {
     final prefs = await SharedPreferences.getInstance();
     final mac = prefs.getString(_macAddressKey);
@@ -68,7 +74,6 @@ class ScanController extends GetxController  with WidgetsBindingObserver{
         final sdkInt = androidInfo.version.sdkInt;
 
         PermissionStatus status;
-
         if (sdkInt >= 33) {
           status = await Permission.photos.status;
           if (status.isDenied) {
@@ -111,6 +116,8 @@ class ScanController extends GetxController  with WidgetsBindingObserver{
   Future<void> pickImageFromGallery() async {
     try {
       isLoading.value = true;
+      // let UI render spinner
+      await Future.delayed(const Duration(milliseconds: 50));
 
       final hasPermission = await requestGalleryPermission();
       if (!hasPermission) {
@@ -134,6 +141,11 @@ class ScanController extends GetxController  with WidgetsBindingObserver{
       }
     } catch (e) {
       log('Failed to select image: $e');
+      showCustomSnackbar(
+        title: '',
+        message: 'failed_select_image',
+        type: SnackbarType.error,
+      );
     } finally {
       isLoading.value = false;
     }
@@ -142,6 +154,7 @@ class ScanController extends GetxController  with WidgetsBindingObserver{
   Future<void> pickImageFromCamera() async {
     try {
       isLoading.value = true;
+      await Future.delayed(const Duration(milliseconds: 50));
 
       final hasPermission = await requestCameraPermission();
       if (!hasPermission) {
@@ -189,12 +202,10 @@ class ScanController extends GetxController  with WidgetsBindingObserver{
       return;
     }
 
-    if (kDebugMode) {
-      await _openCamera();
-    } else {
-      await _openCamera();
-    }
+    // Open USB camera and start a periodic non-blocking poll for captured image
+    await _openCamera();
   }
+
   Future<void> _checkForCapturedImage() async {
     try {
       if (kDebugMode) {
@@ -208,7 +219,6 @@ class ScanController extends GetxController  with WidgetsBindingObserver{
       }
 
       if (imagePath != null && imagePath.isNotEmpty) {
-        // ✅ Image captured from camera!
         final imageFile = File(imagePath);
 
         if (await imageFile.exists()) {
@@ -217,12 +227,14 @@ class ScanController extends GetxController  with WidgetsBindingObserver{
             print('✅ File size: ${await imageFile.length()} bytes');
           }
 
-          // ✅ Set image directly - User will click Analyze button manually
           selectedImage.value = imageFile;
 
           if (kDebugMode) {
             print('✅ Image set to selectedImage - Ready for analysis');
           }
+
+          // stop periodic polling if running
+          _cameraPollTimer?.cancel();
         } else {
           if (kDebugMode) {
             print('❌ Image file does not exist: $imagePath');
@@ -240,50 +252,50 @@ class ScanController extends GetxController  with WidgetsBindingObserver{
     }
   }
 
-
-
-
-
-
-    Future<void> _initPlatformState() async {
-    String platformVersion;
+  Future<void> _initPlatformState() async {
+    // Optional: we avoid forcing plugin init that might auto-open camera on some devices
     try {
-      platformVersion = await _usbCameraPlugin.getPlatformVersion() ?? 'Unknown';
+      final v = await _usbCameraPlugin.getPlatformVersion();
+      if (kDebugMode) print('UsbCameraPlugin version: $v');
     } catch (e) {
-      platformVersion = 'Failed: $e';
+      if (kDebugMode) print('Usb camera init error: $e');
     }
-
   }
 
-
-
-
-
-
-
-
-    Future<void> _openCamera() async {
+  Future<void> _openCamera() async {
     try {
       await _usbCameraPlugin.openCamera();
 
-      // Camera opened, now wait for it to close and check for image
-      // Check multiple times in case of timing issues
-      for (int i = 0; i < 10; i++) {
-        await Future.delayed(const Duration(milliseconds: 500));
+      // Start a non-blocking periodic timer to check for captured image.
+      // This won't block the UI and will stop as soon as image is found or after timeout.
+      _cameraPollTimer?.cancel();
+      int attempts = 0;
+      const maxAttempts = 20; // 20 * 300ms = 6 seconds max
+      _cameraPollTimer = Timer.periodic(const Duration(milliseconds: 300), (timer) async {
+        attempts++;
         await _checkForCapturedImage();
-        if (selectedImage.value != null) {
+
+        if (selectedImage.value != null || attempts >= maxAttempts) {
+          timer.cancel();
           if (kDebugMode) {
-            print('✅ Image loaded after ${(i + 1) * 500}ms');
+            if (selectedImage.value != null) {
+              print('✅ Image captured and loaded after $attempts attempts.');
+            } else {
+              print('⚠️ No image found after $attempts attempts — stopping poll.');
+            }
           }
-          break;
         }
-      }
+      });
     } catch (e) {
-      if (kDebugMode) {
-        print(e);
-      }
+      if (kDebugMode) print('Error opening camera: $e');
+      showCustomSnackbar(
+        title: '',
+        message: 'failed_open_camera',
+        type: SnackbarType.error,
+      );
     }
   }
+
   void showImageSourceDialog() {
     Get.dialog(
       AlertDialog(
@@ -321,6 +333,8 @@ class ScanController extends GetxController  with WidgetsBindingObserver{
 
     try {
       isLoading.value = true;
+      // Give framework a moment to show the loading indicator
+      await Future.delayed(const Duration(milliseconds: 50));
 
       // Check if analysis service is ready
       if (_analysisService.isAnalyzerReady.isFalse) {
@@ -332,24 +346,33 @@ class ScanController extends GetxController  with WidgetsBindingObserver{
         return;
       }
 
-      // FIX: Rotate image based on EXIF data to match Python orientation
-      final fixedFile = await FlutterExifRotation.rotateImage(
-        path: selectedImage.value!.path,
-      );
+      // Rotate image according to EXIF (this uses native plugin)
+      File fixedFile;
+      try {
+        fixedFile = await FlutterExifRotation.rotateImage(path: selectedImage.value!.path);
+      } catch (e) {
+        // If rotation fails, fall back to original
+        log('Exif rotation failed, using original image: $e');
+        fixedFile = selectedImage.value!;
+      }
 
+      // Call analysis service (this may be network or heavy)
       final analysisResponse = await _analysisService.analyzeImage(
         imageFile: File(fixedFile.path),
       );
 
+      // Navigate to results screen
       Get.toNamed(AppPages.resultPage, arguments: analysisResponse);
+
+      // Clear selected image after navigation (optional)
       selectedImage.value = null;
     } catch (e) {
+      log('Failed to analyze image: $e');
       showCustomSnackbar(
         title: '',
         message: 'failed_analyze_image',
         type: SnackbarType.error,
       );
-      log('Failed to analyze image: $e');
     } finally {
       isLoading.value = false;
     }
