@@ -112,14 +112,8 @@ class ResultPage extends StatelessWidget {
                         'analysis_summary'.tr,
                         style: AppTextStyles.heading4,
                       ),
-                      const SizedBox(height: 8),
-                      Text(
-                        'follicles_detected'.trParams({
-                          'foll':
-                          '${controller.analysisResponse.analysis!.folliclesDetected}',
-                        }),
-                        style: AppTextStyles.body2,
-                      ),
+                      const SizedBox(height: 4),
+
                       const SizedBox(height: 4),
                       if (controller.analysisResponse.analysis!.hairColor !=
                           null)

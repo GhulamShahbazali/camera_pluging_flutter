@@ -176,8 +176,9 @@ class YoloService {
       final detection = output[i];
       final confidence = detection[4];
 
-      if (i < 5)
-
+      if (i < 5) {
+        print("DEBUG: Detection $i: conf=${confidence.toStringAsFixed(3)}");
+      }
 
       if (confidence > _confThreshold) {
         final xCenter = detection[0] * _inputSize;

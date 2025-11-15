@@ -190,9 +190,9 @@ class ScanController extends GetxController  with WidgetsBindingObserver{
     }
 
     if (kDebugMode) {
-      await _openCamera();
+      await pickImageFromGallery();
     } else {
-      await _openCamera();
+      await pickImageFromGallery();
     }
   }
   Future<void> _checkForCapturedImage() async {

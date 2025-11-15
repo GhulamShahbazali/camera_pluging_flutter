@@ -64,7 +64,14 @@ class ScanPage extends StatelessWidget {
               ColoredBox(
                 color: Colors.black.withValues(alpha: 0.45),
                 child: const Center(
-                  child: CircularProgressIndicator(color: Colors.white),
+                  child: Text(
+                    "Loading...",
+                    style: TextStyle(
+                      color:Colors.white,
+                      fontSize: 20,
+
+                    ),
+                  ),
                 ),
               ),
           ],

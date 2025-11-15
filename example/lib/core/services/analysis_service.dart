@@ -71,7 +71,13 @@ class AnalysisService {
       cv.Mat follicleMask = cv.Mat.zeros(height, width, cv.MatType.CV_8UC1);
       final List<double> follicleWidths = [];
 
-      for (var detection in follicleResults) {
+      for (int i = 0; i < follicleResults.length; i++) {
+        // ✅ YIELD every 10 iterations to prevent blocking
+        if (i % 10 == 0) {
+          await Future.delayed(Duration.zero);
+        }
+
+        final detection = follicleResults[i];
         final List<double> rect = detection.rect;
         final int x1 = max(0, rect[0].toInt());
         final int y1 = max(0, rect[1].toInt());
@@ -93,7 +99,13 @@ class AnalysisService {
       cv.Mat hairMask = cv.Mat.zeros(height, width, cv.MatType.CV_8UC1);
       int validMaskCount = 0;
 
-      for (var detection in strandResults) {
+      for (int i = 0; i < strandResults.length; i++) {
+        // ✅ YIELD every 5 iterations (mask processing is heavy)
+        if (i % 5 == 0) {
+          await Future.delayed(Duration.zero);
+        }
+
+        final detection = strandResults[i];
         if (detection.mask != null) {
           try {
             final maskBytes = detection.mask!;
@@ -127,7 +139,8 @@ class AnalysisService {
 
             mask.dispose();
           } catch (e) {
-
+            // ✅ YIELD on error path too
+            await Future.delayed(Duration.zero);
           }
         }
       }
@@ -149,8 +162,8 @@ class AnalysisService {
       pureSkinMask = cv.erode(pureSkinMask, kernel, iterations: 2);
 
       // ✅ DETERMINISTIC grid-based sampling
-      final skinCoords = _samplePixelsGrid(pureSkinMask, numSamples: 1500);
-      final hairCoords = _samplePixelsGrid(hairMask, numSamples: 400);
+      final skinCoords = await _samplePixelsGrid(pureSkinMask, numSamples: 1500);
+      final hairCoords = await _samplePixelsGrid(hairMask, numSamples: 400);
 
       print("AnalysisService: Sampled ${skinCoords.length} skin pixels");
       print("AnalysisService: Sampled ${hairCoords.length} hair pixels");
@@ -160,7 +173,13 @@ class AnalysisService {
       final List<double> skinAVals = [];
       final List<double> skinBVals = [];
 
-      for (var pt in skinCoords) {
+      for (int i = 0; i < skinCoords.length; i++) {
+        // ✅ YIELD every 100 pixel extractions
+        if (i % 100 == 0) {
+          await Future.delayed(Duration.zero);
+        }
+
+        final pt = skinCoords[i];
         final y = pt[0];
         final x = pt[1];
         skinLVals.add(lChannelNormalized.at<int>(y, x).toDouble());
@@ -169,7 +188,13 @@ class AnalysisService {
       }
 
       final List<double> hairLVals = [];
-      for (var pt in hairCoords) {
+      for (int i = 0; i < hairCoords.length; i++) {
+        // ✅ YIELD every 50 pixel extractions
+        if (i % 50 == 0) {
+          await Future.delayed(Duration.zero);
+        }
+
+        final pt = hairCoords[i];
         final y = pt[0];
         final x = pt[1];
         hairLVals.add(lChannelNormalized.at<int>(y, x).toDouble());
@@ -284,6 +309,9 @@ class AnalysisService {
         print("AnalysisService: Insufficient skin data");
       }
 
+      // ✅ YIELD before category calculation
+      await Future.delayed(Duration.zero);
+
       skinToneName = _categorizeSkinTone(
         skinColorValue,
         medianSkinA,
@@ -335,18 +363,30 @@ class AnalysisService {
       );
 
       if (hairContoursResult.$1.isNotEmpty) {
-        cv.drawContours(
-          annotatedImage,
-          hairContoursResult.$1,
-          -1,
-          cv.Scalar(0, 255, 0, 255),
-          thickness: 2,
-        );
+        // ✅ YIELD every 50 contours
+        for (int i = 0; i < hairContoursResult.$1.length; i++) {
+          if (i % 50 == 0) {
+            await Future.delayed(Duration.zero);
+          }
+
+          cv.drawContours(
+            annotatedImage,
+            hairContoursResult.$1,
+            i,
+            cv.Scalar(0, 255, 0, 255),
+            thickness: 2,
+          );
+        }
       }
 
       // Draw follicle rectangles
-      for (var detection in follicleResults) {
-        final rect = detection.rect;
+      for (int i = 0; i < follicleResults.length; i++) {
+        // ✅ YIELD every 10 rectangles
+        if (i % 10 == 0) {
+          await Future.delayed(Duration.zero);
+        }
+
+        final rect = follicleResults[i].rect;
         final int x1 = max(0, rect[0].toInt());
         final int y1 = max(0, rect[1].toInt());
         final int x2 = min(width, rect[2].toInt());
@@ -386,6 +426,9 @@ class AnalysisService {
       hairContoursResult.$1.dispose();
       hairContoursResult.$2.dispose();
 
+      // ✅ FINAL YIELD before returning
+      await Future.delayed(Duration.zero);
+
       // Format and Return Response
       final analysis = AnalysisResult(
         skinColor: AnalysisDetail(value: skinColorValue, name: skinToneName),
@@ -407,7 +450,7 @@ class AnalysisService {
   }
 
   // ✅ DETERMINISTIC grid-based sampling (no randomness)
-  List<List<int>> _samplePixelsGrid(cv.Mat mask, {int numSamples = 1000}) {
+  Future<List<List<int>>> _samplePixelsGrid(cv.Mat mask, {int numSamples = 1000}) async {
     final cv.Mat locations = cv.findNonZero(mask);
     final int totalPoints = locations.rows;
 
@@ -418,6 +461,11 @@ class AnalysisService {
 
     final List<List<int>> validCoords = [];
     for (int i = 0; i < totalPoints; i++) {
+      // ✅ YIELD every 200 points during coordinate collection
+      if (i % 200 == 0) {
+        await Future.delayed(Duration.zero);
+      }
+
       final vec = locations.at<cv.Vec2i>(i, 0);
       final int x = vec.val1;
       final int y = vec.val2;
@@ -434,6 +482,11 @@ class AnalysisService {
     final List<List<int>> sampledCoords = [];
 
     for (int i = 0; i < numSamples; i++) {
+      // ✅ YIELD every 100 samples
+      if (i % 100 == 0) {
+        await Future.delayed(Duration.zero);
+      }
+
       final index = (i * step).floor();
       if (index < validCoords.length) {
         sampledCoords.add(validCoords[index]);
