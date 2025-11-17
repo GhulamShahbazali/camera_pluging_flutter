@@ -69,7 +69,7 @@ const Map<String, String> esES = {
 
   // Result Page
   'back_to_scan': 'Volver al escaneo',
-  'analysis_summary': 'Resumen del análisis',
+  'analysis_summary': 'Analisis y Protocolos',
   'submitting_result': 'Enviando resultado...',
   'skin_color': 'Color de piel: @category (@value)',
   'hair_color': 'Color de cabello: @category (@value)',

@@ -136,8 +136,9 @@ void _showAdvancedBottomSheet(BuildContext context) {
                   icon: AppAssets.usbConnection,
                   title: 'usb_conection'.tr,
                   iconSize: 30,
-                  onTap: () {
-                    controller.pickImage();
+                  onTap: () async {
+                    await controller.pickImage();
+                    Get.back();
                   },
                 ),
                 BottomSheetCircular(
@@ -146,8 +147,9 @@ void _showAdvancedBottomSheet(BuildContext context) {
                   icon: AppAssets.cameraIcon,
                   title: 'camera'.tr,
                   iconSize: 40,
-                  onTap: () {
-                    controller.pickImageFromCamera();
+                  onTap: () async {
+                    await controller.pickImageFromCamera();
+                    Get.back();
                   },
                 ),
                 BottomSheetCircular(
@@ -156,8 +158,9 @@ void _showAdvancedBottomSheet(BuildContext context) {
                   iconSize: 30,
                   icon: AppAssets.gallery,
                   title: 'galery'.tr,
-                  onTap: () {
-                    controller.pickImageFromGallery();
+                  onTap: () async {
+                    await controller.pickImageFromGallery();
+                    Get.back();
                   },
                 ),
               ],
