@@ -271,7 +271,9 @@ class ScanController extends GetxController with WidgetsBindingObserver {
       _cameraPollTimer?.cancel();
       int attempts = 0;
       const maxAttempts = 20; // 20 * 300ms = 6 seconds max
-      _cameraPollTimer = Timer.periodic(const Duration(milliseconds: 300), (timer) async {
+      _cameraPollTimer = Timer.periodic(const Duration(milliseconds: 300), (
+        timer,
+      ) async {
         attempts++;
         await _checkForCapturedImage();
 
@@ -281,7 +283,9 @@ class ScanController extends GetxController with WidgetsBindingObserver {
             if (selectedImage.value != null) {
               print('✅ Image captured and loaded after $attempts attempts.');
             } else {
-              print('⚠️ No image found after $attempts attempts — stopping poll.');
+              print(
+                '⚠️ No image found after $attempts attempts — stopping poll.',
+              );
             }
           }
         }
@@ -349,7 +353,9 @@ class ScanController extends GetxController with WidgetsBindingObserver {
       // Rotate image according to EXIF (this uses native plugin)
       File fixedFile;
       try {
-        fixedFile = await FlutterExifRotation.rotateImage(path: selectedImage.value!.path);
+        fixedFile = await FlutterExifRotation.rotateImage(
+          path: selectedImage.value!.path,
+        );
       } catch (e) {
         // If rotation fails, fall back to original
         log('Exif rotation failed, using original image: $e');

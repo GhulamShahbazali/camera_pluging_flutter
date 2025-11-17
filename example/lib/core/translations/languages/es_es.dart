@@ -1,5 +1,5 @@
 const Map<String, String> esES = {
-  'initializing': 'INITIALISIERUNG',
+  'initializing': 'INICIALIZANDO',
 
   // Common
   'ok': 'OK',
@@ -28,7 +28,7 @@ const Map<String, String> esES = {
   'cheeks': 'MEJILLAS',
 
   // Frontal Parts
-  'peco': 'PECO',
+  'peco': 'PECHO',
   'arms': 'BRAZOS',
   'bikini': 'BIKINI',
   'thighs': 'MUSLOS',
@@ -55,11 +55,17 @@ const Map<String, String> esES = {
   'device_activated': 'DISPOSITIVO ACTIVADO \nEXITOSAMENTE',
 
   // scan
+  'camera': 'CÁMARA',
+  'galery': 'GALERÍA',
   'activate': 'ACTIVAR',
   'protocol': 'PROTOCOLO',
   'and_result': 'Y RESULTADOS',
   'start_scan': 'INICIAR ESCANEO',
+  'usb_conection': 'DISPOSITIVO USB',
   'analyze_with_ai': 'ANALIZAR CON IA',
+  'choose_how_to_scan': 'ELIGA COMO ESCANEAR',
+  'select_loading_method':
+      'SELECCIONE UN MÉTODO PARA CARGAR O CAPTURAR SU ESCANEO.',
 
   // Result Page
   'back_to_scan': 'Volver al escaneo',

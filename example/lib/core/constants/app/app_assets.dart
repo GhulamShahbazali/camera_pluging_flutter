@@ -40,13 +40,16 @@ class AppAssets {
   static const String initializingBanner = '$path/initalizingBanner.png';
 
   //icons
+  static const String gallery = 'assets/icons/gallery.png';
   static const String circleBg = 'assets/icons/circleBg.png';
-  static const String closeIcon = 'assets/icons/closeIcon.png';
   static const String scanIcon = 'assets/icons/scanIcon.png';
-  static const String rejectIcon = 'assets/icons/rejectIcon.png';
   static const String cameraIcon = 'assets/icons/cameraIcon.png';
+  static const String closeIcon = 'assets/icons/closeIcon.png';
+  static const String rejectIcon = 'assets/icons/rejectIcon.png';
   static const String settingIcon = 'assets/icons/settingIcon.png';
   static const String leftMoveIcon = 'assets/icons/leftMoveIcon.png';
   static const String activateIcon = 'assets/icons/activateIcon.png';
+  static const String usbConnection = 'assets/icons/usbConnection.png';
   static const String rightMoveIcon = 'assets/icons/rightMoveIcon.png';
+  static const String bottomsheetBg = 'assets/icons/bottomsheet_bg.png';
 }

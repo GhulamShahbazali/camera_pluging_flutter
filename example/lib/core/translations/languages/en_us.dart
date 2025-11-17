@@ -55,11 +55,16 @@ const Map<String, String> enUS = {
   'device_activated': 'DEVICE SUCCESSFULLY \nACTIVATED',
 
   // scan
+  'camera': 'CÁMARA',
+  'galeria': 'GALERÍA',
   'protocol': 'PROTOCOL',
   'activate': 'ACTIVATE',
-  'start_scan': 'Start Scan',
   'and_result': 'AND RESULT',
+  'start_scan': 'Start Scan',
+  'usb_conection': 'DISPOSITIVO USB',
   'analyze_with_ai': 'ANALYZE WITH AI',
+  'choose_how_to_scan': 'CHOOSE HOW TO SCAN',
+  'select_loading_method': 'SELECT A METHOD TO UPLOAD OR CAPTURE YOUR SCAN.',
 
   // Result Page
   'back_to_scan': 'Back to scan',

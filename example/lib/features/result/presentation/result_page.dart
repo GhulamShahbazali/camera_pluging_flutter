@@ -3,16 +3,15 @@
 import 'dart:convert';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
-import '../../../core/api/models/analysis_response.dart';
-import '../../../core/constants/ui/app_colors.dart';
-import '../../../core/constants/ui/app_text_styles.dart';
-import '../../../core/services/ultrascan_result_service.dart';
-import '../../../core/widgets/background_container.dart';
-import '../../../core/widgets/setting_icon.dart';
-import '../../../core/widgets/ultrascan4d.dart';
 import '../../../routes/app_pages.dart';
-import '../../body_area/widget/text_button.dart';
 import '../controller/result_controller.dart';
+import '../../../core/widgets/ultrascan4d.dart';
+import '../../../core/widgets/setting_icon.dart';
+import '../../body_area/widget/text_button.dart';
+import '../../../core/constants/ui/app_colors.dart';
+import '../../../core/api/models/analysis_response.dart';
+import '../../../core/constants/ui/app_text_styles.dart';
+import '../../../core/widgets/background_container.dart';
 
 class ResultPage extends StatelessWidget {
   const ResultPage({required this.analysisResponse, super.key});
@@ -120,9 +119,9 @@ class ResultPage extends StatelessWidget {
                         Text(
                           'hair_color'.trParams({
                             'category':
-                            '${controller.analysisResponse.analysis!.hairColor!.name}',
+                                '${controller.analysisResponse.analysis!.hairColor!.name}',
                             'value':
-                            '${controller.analysisResponse.analysis!.hairColor!.value?.toStringAsFixed(1)}',
+                                '${controller.analysisResponse.analysis!.hairColor!.value?.toStringAsFixed(1)}',
                           }),
                           style: AppTextStyles.body2,
                         ),
@@ -131,9 +130,9 @@ class ResultPage extends StatelessWidget {
                         Text(
                           'hair_thickness'.trParams({
                             'category':
-                            '${controller.analysisResponse.analysis!.hairThickness!.name}',
+                                '${controller.analysisResponse.analysis!.hairThickness!.name}',
                             'value':
-                            '${controller.analysisResponse.analysis!.hairThickness!.value?.toStringAsFixed(1)}',
+                                '${controller.analysisResponse.analysis!.hairThickness!.value?.toStringAsFixed(1)}',
                           }),
                           style: AppTextStyles.body2,
                         ),
@@ -142,15 +141,15 @@ class ResultPage extends StatelessWidget {
                         Text(
                           'skin_color'.trParams({
                             'category':
-                            '${controller.analysisResponse.analysis!.skinColor!.name}',
+                                '${controller.analysisResponse.analysis!.skinColor!.name}',
                             'value':
-                            '${controller.analysisResponse.analysis!.skinColor!.value?.toStringAsFixed(1)}',
+                                '${controller.analysisResponse.analysis!.skinColor!.value?.toStringAsFixed(1)}',
                           }),
                           style: AppTextStyles.body2,
                         ),
                       const SizedBox(height: 8),
                       Obx(
-                            () => Text(
+                        () => Text(
                           controller.submitMessage.value.isEmpty
                               ? 'submitting_result'.tr
                               : controller.submitMessage.value,

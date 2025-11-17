@@ -4,7 +4,6 @@ import '../../../core/constants/app/app_assets.dart';
 import '../../../core/constants/ui/app_colors.dart';
 import '../../../core/constants/ui/app_text_styles.dart';
 
-
 class CirculeContainer extends StatelessWidget {
   const CirculeContainer({
     required this.icon,
@@ -13,8 +12,10 @@ class CirculeContainer extends StatelessWidget {
     this.width,
     this.onTap,
     super.key,
+    this.iconSize = 50,
   });
   final double? height;
+  final double? iconSize;
   final double? width;
   final String icon;
   final String title;
@@ -36,7 +37,7 @@ class CirculeContainer extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Image.asset(icon, height: 50),
+            Image.asset(icon, height: iconSize),
             Text(title, style: AppTextStyles.body1),
           ],
         ),

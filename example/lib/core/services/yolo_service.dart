@@ -103,12 +103,6 @@ class YoloService {
 
     _detectorInterpreter!.run(inputTensor, output);
 
-    final rawOutput = output[0] as List<List<double>>;
-    final allConfidences = rawOutput[4];
-    final highConfCount = allConfidences
-        .where((c) => c > _confThreshold)
-        .length;
-
     final List<List<double>> typedOutput = (output[0] as List)
         .map((e) => (e as List).cast<double>())
         .toList();
@@ -166,10 +160,10 @@ class YoloService {
   }
 
   List<YoloDetection> _postProcessDetections(
-      List<List<double>> output,
-      int originalImageHeight,
-      int originalImageWidth,
-      ) {
+    List<List<double>> output,
+    int originalImageHeight,
+    int originalImageWidth,
+  ) {
     final List<YoloDetection> detections = [];
 
     for (int i = 0; i < output.length; i++) {
@@ -210,11 +204,11 @@ class YoloService {
   }
 
   List<YoloDetection> _postProcessSegmentation(
-      List<List<double>> detectionOutput, // [8400, 37]
-      List<List<List<double>>> maskPrototypes, // [160, 160, 32]
-      int originalImageHeight,
-      int originalImageWidth,
-      ) {
+    List<List<double>> detectionOutput, // [8400, 37]
+    List<List<List<double>>> maskPrototypes, // [160, 160, 32]
+    int originalImageHeight,
+    int originalImageWidth,
+  ) {
     final List<YoloDetection> detections = [];
 
     for (final detection in detectionOutput) {
@@ -264,12 +258,12 @@ class YoloService {
   }
 
   Uint8List _generateMask(
-      List<double> coefficients, // [32]
-      List<List<List<double>>> prototypes, // [160, 160, 32]
-      int targetWidth,
-      int targetHeight,
-      List<double> box,
-      ) {
+    List<double> coefficients, // [32]
+    List<List<List<double>>> prototypes, // [160, 160, 32]
+    int targetWidth,
+    int targetHeight,
+    List<double> box,
+  ) {
     final int protoHeight = prototypes.length; // 160
     final int protoWidth = prototypes[0].length; // 160
     final int numCoefficients = coefficients.length; // 32
@@ -277,7 +271,7 @@ class YoloService {
     // 1. Create the [160, 160] mask data
     final maskData = List.generate(
       protoHeight,
-          (y) => List.generate(protoWidth, (x) => 0.0),
+      (y) => List.generate(protoWidth, (x) => 0.0),
     );
 
     // 2. Matrix multiplication for channels-last: [160, 160, 32] @ [32]
@@ -393,7 +387,7 @@ extension Transpose on List<List<double>> {
     if (isEmpty) return [];
     return List.generate(
       this[0].length,
-          (i) => List.generate(length, (j) => this[j][i]),
+      (i) => List.generate(length, (j) => this[j][i]),
     );
   }
 }
@@ -415,7 +409,7 @@ extension CustomReshape on List {
       if (dim == shape.length - 1) {
         return List.generate(
           shape[dim],
-              (_) => iter.moveNext() ? iter.current : null,
+          (_) => iter.moveNext() ? iter.current : null,
         );
       }
       return List.generate(shape[dim], (_) => _build(dim + 1, iter));
