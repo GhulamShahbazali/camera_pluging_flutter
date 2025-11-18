@@ -34,7 +34,7 @@ class SettingPage extends StatelessWidget {
                     final prefs = await SharedPreferences.getInstance();
                     final mac = prefs.getString('saved_mac_address');
                     if (mac == null || mac.isEmpty) {
-                      Get.toNamed(AppPages.settingPage);
+                      Get.back();
                     } else {
                       Get.toNamed(AppPages.scanPage);
                     }

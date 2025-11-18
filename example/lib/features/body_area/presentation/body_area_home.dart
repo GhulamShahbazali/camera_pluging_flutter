@@ -75,7 +75,7 @@ class BodyAreaHome extends StatelessWidget {
                     ),
                     onTap: () {
                       controller.pageController.previousPage(
-                        duration: const Duration(milliseconds: 0),
+                        duration: const Duration(milliseconds: 300),
                         curve: Curves.easeInOut,
                       );
                     },
@@ -91,18 +91,31 @@ class BodyAreaHome extends StatelessWidget {
                       onTap: () async {
                         // Enforce a selection based on current tab
                         final page = controller.currentPage.value;
-                        var hasSelection = false;
-                        if (page == 0) {
-                          final c = Get.find<FrontalController>();
-                          hasSelection = c.selectedButton.value.isNotEmpty;
-                        } else if (page == 1) {
-                          final c = Get.find<BackController>();
-                          hasSelection = c.selectedButton.value.isNotEmpty;
-                        } else {
-                          final c = Get.find<FaceController>();
-                          hasSelection = c.selectedButton.value.isNotEmpty;
-                        }
 
+                        // Quick synchronous check first
+                        bool hasSelection;
+                        switch (page) {
+                          case 0:
+                            hasSelection = Get.find<FrontalController>()
+                                .selectedButton
+                                .value
+                                .isNotEmpty;
+                            break;
+                          case 1:
+                            hasSelection = Get.find<BackController>()
+                                .selectedButton
+                                .value
+                                .isNotEmpty;
+                            break;
+                          case 2:
+                            hasSelection = Get.find<FaceController>()
+                                .selectedButton
+                                .value
+                                .isNotEmpty;
+                            break;
+                          default:
+                            hasSelection = false;
+                        }
                         if (!hasSelection) {
                           showCustomSnackbar(
                             title: '',
@@ -133,7 +146,7 @@ class BodyAreaHome extends StatelessWidget {
                     ),
                     onTap: () {
                       controller.pageController.nextPage(
-                        duration: const Duration(milliseconds: 0),
+                        duration: const Duration(milliseconds: 300),
                         curve: Curves.easeInOut,
                       );
                     },
