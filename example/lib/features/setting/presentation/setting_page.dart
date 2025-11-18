@@ -2,6 +2,8 @@ import 'dart:developer';
 
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:usb_camera_plugin_example/routes/app_pages.dart';
 
 import '../../../core/constants/ui/app_colors.dart';
 import '../../../core/constants/ui/app_text_styles.dart';
@@ -10,7 +12,6 @@ import '../../../core/widgets/setting_icon.dart';
 import '../../../core/widgets/ultrascan4d.dart';
 import '../../body_area/widget/text_button.dart';
 import '../controller/setting_controller.dart';
-
 
 class SettingPage extends StatelessWidget {
   const SettingPage({super.key});
@@ -29,9 +30,14 @@ class SettingPage extends StatelessWidget {
                 padding: const EdgeInsets.only(left: 18),
                 child: SettingIconWidget(
                   haveArrowIcon: true,
-                  onTap: () {
-                    log('message');
-                    Get.back();
+                  onTap: () async {
+                    final prefs = await SharedPreferences.getInstance();
+                    final mac = prefs.getString('saved_mac_address');
+                    if (mac == null || mac.isEmpty) {
+                      Get.toNamed(AppPages.settingPage);
+                    } else {
+                      Get.toNamed(AppPages.scanPage);
+                    }
                   },
                 ),
               ),
