@@ -99,70 +99,80 @@ class ResultPage extends StatelessWidget {
                     ),
                   ),
                 ),
-
-              if (controller.analysisResponse.analysis != null) ...[
-                const SizedBox(height: 16),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'analysis_summary'.tr,
-                        style: AppTextStyles.heading4,
-                      ),
-                      const SizedBox(height: 4),
-
-                      const SizedBox(height: 4),
-                      if (controller.analysisResponse.analysis!.hairColor !=
-                          null)
-                        Text(
-                          'hair_color'.trParams({
-                            'category':
-                                '${controller.analysisResponse.analysis!.hairColor!.name}',
-                            'value':
-                                '${controller.analysisResponse.analysis!.hairColor!.value?.toStringAsFixed(1)}',
-                          }),
-                          style: AppTextStyles.body2,
-                        ),
-                      if (controller.analysisResponse.analysis!.hairThickness !=
-                          null)
-                        Text(
-                          'hair_thickness'.trParams({
-                            'category':
-                                '${controller.analysisResponse.analysis!.hairThickness!.name}',
-                            'value':
-                                '${controller.analysisResponse.analysis!.hairThickness!.value?.toStringAsFixed(1)}',
-                          }),
-                          style: AppTextStyles.body2,
-                        ),
-                      if (controller.analysisResponse.analysis!.skinColor !=
-                          null)
-                        Text(
-                          'skin_color'.trParams({
-                            'category':
-                                '${controller.analysisResponse.analysis!.skinColor!.name}',
-                            'value':
-                                '${controller.analysisResponse.analysis!.skinColor!.value?.toStringAsFixed(1)}',
-                          }),
-                          style: AppTextStyles.body2,
-                        ),
-                      const SizedBox(height: 8),
-                      Obx(
-                        () => Text(
-                          controller.submitMessage.value.isEmpty
-                              ? 'submitting_result'.tr
-                              : controller.submitMessage.value,
-                          style: AppTextStyles.body2.copyWith(
-                            fontStyle: FontStyle.italic,
-                          ),
-                        ),
-                      ),
-                    ],
+              Text('analysis_summary'.tr, style: AppTextStyles.heading4),
+              Obx(
+                () => Padding(
+                  padding: const EdgeInsets.all(20),
+                  child: Text(
+                    controller.resultLink.value,
+                    style: AppTextStyles.body2,
                   ),
                 ),
-              ],
-              const SizedBox(height: 20),
+              ),
+
+              // if (controller.analysisResponse.analysis != null) ...[
+              //   const SizedBox(height: 16),
+              //   Padding(
+              //     padding: const EdgeInsets.symmetric(horizontal: 20),
+              //     child: Column(
+              //       crossAxisAlignment: CrossAxisAlignment.start,
+              //       children: [
+              //         Text(
+              //           'analysis_summary'.tr,
+              //           style: AppTextStyles.heading4,
+              //         ),
+              //         const SizedBox(height: 4),
+
+              //         const SizedBox(height: 4),
+              //         if (controller.analysisResponse.analysis!.hairColor !=
+              //             null)
+              //           Text(
+              //             'hair_color'.trParams({
+              //               'category':
+              //                   '${controller.analysisResponse.analysis!.hairColor!.name}',
+              //               'value':
+              //                   '${controller.analysisResponse.analysis!.hairColor!.value?.toStringAsFixed(1)}',
+              //             }),
+              //             style: AppTextStyles.body2,
+              //           ),
+              //         if (controller.analysisResponse.analysis!.hairThickness !=
+              //             null)
+              //           Text(
+              //             'hair_thickness'.trParams({
+              //               'category':
+              //                   '${controller.analysisResponse.analysis!.hairThickness!.name}',
+              //               'value':
+              //                   '${controller.analysisResponse.analysis!.hairThickness!.value?.toStringAsFixed(1)}',
+              //             }),
+              //             style: AppTextStyles.body2,
+              //           ),
+              //         if (controller.analysisResponse.analysis!.skinColor !=
+              //             null)
+              //           Text(
+              //             'skin_color'.trParams({
+              //               'category':
+              //                   '${controller.analysisResponse.analysis!.skinColor!.name}',
+              //               'value':
+              //                   '${controller.analysisResponse.analysis!.skinColor!.value?.toStringAsFixed(1)}',
+              //             }),
+              //             style: AppTextStyles.body2,
+              //           ),
+              //         const SizedBox(height: 8),
+              //         Obx(
+              //           () => Text(
+              //             controller.submitMessage.value.isEmpty
+              //                 ? 'submitting_result'.tr
+              //                 : controller.submitMessage.value,
+              //             style: AppTextStyles.body2.copyWith(
+              //               fontStyle: FontStyle.italic,
+              //             ),
+              //           ),
+              //         ),
+              //       ],
+              //     ),
+              //   ),
+              // ],
+              const SizedBox(height: 60),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 30),
                 child: Row(

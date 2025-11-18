@@ -7,14 +7,14 @@ import '../../../core/controllers/base_controller.dart';
 import '../../../core/controllers/selection_controller.dart';
 import '../../../core/services/ultrascan_result_service.dart';
 
-
 class ResultController extends BaseController {
   ResultController({required this.analysisResponse});
   final AnalysisResponse analysisResponse;
 
   final RxString submitMessage = ''.obs;
-  final UltrascanResultService _service = UltrascanResultService();
+  final UltrascanResultService service = UltrascanResultService();
   static const String _macAddressKey = 'saved_mac_address';
+  RxString resultLink = ''.obs;
 
   @override
   void onInit() {
@@ -42,36 +42,17 @@ class ResultController extends BaseController {
       final thickNum = analysisResponse.analysis!.hairThickness?.value ?? 0.0;
       final thick = double.parse(thickNum.toStringAsFixed(2));
 
-      final resp = await _service.submitResult(
+      final resp = await service.resultLink(
         macAddress: mac,
 
-        // --- FIX: Convert the double to an int ---
         piel: piel.round(),
-
-        // --- FIX: Convert the double to an int ---
         color: color.round(),
 
         thick: thick,
         zone: zone,
       );
       debugPrint(resp.toString());
-      final data = resp.data;
-      String message;
-      if (data is Map) {
-        message =
-            (data['Results'] ??
-                data['results'] ??
-                data['message'] ??
-                data['Message'] ??
-                data)
-                .toString();
-      } else if (data is String) {
-        message = data;
-      } else {
-        message = data.toString();
-      }
-      debugPrint(message);
-      submitMessage.value = message;
+      resultLink.value = resp;
     } catch (e) {
       submitMessage.value = 'Failed to send';
     }
