@@ -75,7 +75,7 @@ class BodyAreaHome extends StatelessWidget {
                     ),
                     onTap: () {
                       controller.pageController.previousPage(
-                        duration: const Duration(milliseconds: 300),
+                        duration: const Duration(milliseconds: 0),
                         curve: Curves.easeInOut,
                       );
                     },
@@ -133,7 +133,7 @@ class BodyAreaHome extends StatelessWidget {
                     ),
                     onTap: () {
                       controller.pageController.nextPage(
-                        duration: const Duration(milliseconds: 300),
+                        duration: const Duration(milliseconds: 0),
                         curve: Curves.easeInOut,
                       );
                     },
