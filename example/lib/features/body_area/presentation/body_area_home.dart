@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:usb_camera_plugin_example/features/body_area/presentation/pages/back_page.dart';
 import 'package:usb_camera_plugin_example/features/body_area/presentation/pages/face_page.dart';
@@ -87,7 +88,7 @@ class BodyAreaHome extends StatelessWidget {
                           : controller.currentPage.value == 0
                           ? 'frontal'.tr
                           : 'face'.tr,
-                      onTap: () {
+                      onTap: () async {
                         // Enforce a selection based on current tab
                         final page = controller.currentPage.value;
                         var hasSelection = false;
@@ -110,7 +111,14 @@ class BodyAreaHome extends StatelessWidget {
                           );
                           return;
                         }
-                        Get.toNamed(AppPages.scanPage);
+
+                        final prefs = await SharedPreferences.getInstance();
+                        final mac = prefs.getString('saved_mac_address');
+                        if (mac == null || mac.isEmpty) {
+                          Get.toNamed(AppPages.settingPage);
+                        } else {
+                          Get.toNamed(AppPages.scanPage);
+                        }
                       },
                       paddingHorizontal: 40,
                       paddingVertical: 11,

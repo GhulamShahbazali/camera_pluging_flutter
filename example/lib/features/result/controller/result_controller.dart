@@ -14,7 +14,7 @@ class ResultController extends BaseController {
   final RxString submitMessage = ''.obs;
   final UltrascanResultService service = UltrascanResultService();
   static const String _macAddressKey = 'saved_mac_address';
-  RxString resultLink = ''.obs;
+  RxString link = ''.obs;
 
   @override
   void onInit() {
@@ -42,7 +42,7 @@ class ResultController extends BaseController {
       final thickNum = analysisResponse.analysis!.hairThickness?.value ?? 0.0;
       final thick = double.parse(thickNum.toStringAsFixed(2));
 
-      final resp = await service.resultLink(
+      final resp = await service.submitResult(
         macAddress: mac,
 
         piel: piel.round(),
@@ -52,7 +52,23 @@ class ResultController extends BaseController {
         zone: zone,
       );
       debugPrint(resp.toString());
-      resultLink.value = resp;
+      final data = resp.data;
+      String message;
+      if (data is Map) {
+        message =
+            (data['Results'] ??
+                    data['results'] ??
+                    data['message'] ??
+                    data['Message'] ??
+                    data)
+                .toString();
+      } else if (data is String) {
+        message = data;
+      } else {
+        message = data.toString();
+      }
+      debugPrint(message);
+      submitMessage.value = message;
     } catch (e) {
       submitMessage.value = 'Failed to send';
     }

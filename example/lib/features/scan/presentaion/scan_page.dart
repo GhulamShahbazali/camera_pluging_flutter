@@ -71,9 +71,9 @@ class ScanPage extends StatelessWidget {
               Positioned.fill(
                 child: ColoredBox(
                   color: Colors.black.withAlpha(110),
-                  child: const Center(
+                  child: Center(
                     child: Text(
-                      "Loading....",
+                      "processing".tr,
                       style: TextStyle(color: Colors.white),
                     ),
                   ),
@@ -110,62 +110,67 @@ void _showAdvancedBottomSheet(BuildContext context) {
     backgroundColor: Colors.transparent,
     builder: (BuildContext context) {
       return Container(
-        height: size.height * 0.3,
+        height: size.height * 0.33,
         decoration: BoxDecoration(
           image: DecorationImage(
             image: AssetImage(AppAssets.bottomsheetBg),
             fit: BoxFit.cover,
           ),
         ),
-        child: Column(
-          children: [
-            SizedBox(height: 50),
-            Text('choose_how_to_scan'.tr, style: AppTextStyles.body2),
-            SizedBox(height: 10),
-            Text(
-              'select_loading_method'.tr,
-              style: AppTextStyles.body1.copyWith(color: AppColors.goldColor),
-            ),
-            SizedBox(height: 20),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                BottomSheetCircular(
-                  height: size.width * 0.27,
-                  width: size.width * 0.27,
-                  icon: AppAssets.usbConnection,
-                  title: 'usb_conection'.tr,
-                  iconSize: 30,
-                  onTap: () async {
-                    await controller.pickImage();
-                    Get.back();
-                  },
-                ),
-                BottomSheetCircular(
-                  height: size.width * 0.27,
-                  width: size.width * 0.27,
-                  icon: AppAssets.cameraIcon,
-                  title: 'camera'.tr,
-                  iconSize: 40,
-                  onTap: () async {
-                    await controller.pickImageFromCamera();
-                    Get.back();
-                  },
-                ),
-                BottomSheetCircular(
-                  height: size.width * 0.27,
-                  width: size.width * 0.27,
-                  iconSize: 30,
-                  icon: AppAssets.gallery,
-                  title: 'galery'.tr,
-                  onTap: () async {
-                    await controller.pickImageFromGallery();
-                    Get.back();
-                  },
-                ),
-              ],
-            ),
-          ],
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 10),
+          child: Column(
+            children: [
+              SizedBox(height: 45),
+              Text('choose_how_to_scan'.tr, style: AppTextStyles.body2),
+              SizedBox(height: 10),
+              Text(
+                'select_loading_method'.tr,
+                style: AppTextStyles.body1.copyWith(color: AppColors.goldColor),
+                textAlign: TextAlign.center,
+              ),
+              SizedBox(height: 20),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  BottomSheetCircular(
+                    height: size.width * 0.27,
+                    width: size.width * 0.27,
+                    icon: AppAssets.usbConnection,
+                    title: 'usb_conection'.tr,
+                    iconSize: 30,
+                    onTap: () async {
+                      await controller.pickImage();
+                      Get.back();
+                    },
+                  ),
+                  BottomSheetCircular(
+                    height: size.width * 0.27,
+                    width: size.width * 0.27,
+                    icon: AppAssets.cameraIcon,
+                    title: 'camera'.tr,
+                    iconSize: 40,
+                    onTap: () async {
+                      await controller.pickImageFromCamera();
+                      Get.back();
+                    },
+                  ),
+                  BottomSheetCircular(
+                    height: size.width * 0.27,
+                    width: size.width * 0.27,
+                    iconSize: 30,
+                    icon: AppAssets.gallery,
+                    title: 'galery'.tr,
+                    onTap: () async {
+                      await controller.pickImageFromGallery();
+                      Get.back();
+                    },
+                  ),
+                ],
+              ),
+              SizedBox(height: 20),
+            ],
+          ),
         ),
       );
     },

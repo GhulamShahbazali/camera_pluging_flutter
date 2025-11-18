@@ -64,6 +64,7 @@ const Map<String, String> enUS = {
   'usb_conection': 'DISPOSITIVO USB',
   'analyze_with_ai': 'ANALYZE WITH AI',
   'choose_how_to_scan': 'CHOOSE HOW TO SCAN',
+  'processing': 'PROCESSING...',
   'select_loading_method': 'SELECT A METHOD TO UPLOAD OR CAPTURE YOUR SCAN.',
 
   // Result Page
