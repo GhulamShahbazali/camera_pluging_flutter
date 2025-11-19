@@ -116,7 +116,6 @@ class ScanController extends GetxController with WidgetsBindingObserver {
   Future<void> pickImageFromGallery() async {
     try {
       isLoading.value = true;
-      // let UI render spinner
       await Future.delayed(const Duration(milliseconds: 50));
 
       final hasPermission = await requestGalleryPermission();
@@ -128,6 +127,9 @@ class ScanController extends GetxController with WidgetsBindingObserver {
         );
         return;
       }
+
+      // Add delay after permission is granted
+      await Future.delayed(const Duration(milliseconds: 100));
 
       final image = await _picker.pickImage(
         source: ImageSource.gallery,
