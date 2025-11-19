@@ -19,6 +19,7 @@ class SettingPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final controller = Get.put(SettingController());
+    final isFromHome = Get.arguments ?? false;
     return Scaffold(
       body: BackgroundContainer(
         child: Column(
@@ -31,12 +32,16 @@ class SettingPage extends StatelessWidget {
                 child: SettingIconWidget(
                   haveArrowIcon: true,
                   onTap: () async {
-                    final prefs = await SharedPreferences.getInstance();
-                    final mac = prefs.getString('saved_mac_address');
-                    if (mac == null || mac.isEmpty) {
-                      Get.back();
+                    if (isFromHome) {
+                      final prefs = await SharedPreferences.getInstance();
+                      final mac = prefs.getString('saved_mac_address');
+                      if (mac == null || mac.isEmpty) {
+                        Get.back();
+                      } else {
+                        Get.toNamed(AppPages.scanPage);
+                      }
                     } else {
-                      Get.toNamed(AppPages.scanPage);
+                      Get.back();
                     }
                   },
                 ),

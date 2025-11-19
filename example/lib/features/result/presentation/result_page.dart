@@ -181,6 +181,7 @@ class ResultPage extends StatelessWidget {
                       child: CustomTextButton(
                         text: 'back_to_scan'.tr,
                         onTap: () {
+                          controller.analysisResponse.analysis = null;
                           Get.offAndToNamed(AppPages.scanPage);
                         },
                         paddingHorizontal: 40,

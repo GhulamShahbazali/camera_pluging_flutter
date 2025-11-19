@@ -176,27 +176,22 @@
 //   }
 // }
 
-
 // ignore_for_file: sort_constructors_first, document_ignores, eol_at_end_of_file
-
 
 import 'analysis_result.dart';
 
 class AnalysisResponse {
-  final AnalysisResult? analysis;
+  AnalysisResult? analysis;
 
   AnalysisResponse({this.analysis});
 
   factory AnalysisResponse.fromJson(Map<String, dynamic> json) {
     return AnalysisResponse(
       analysis: json['analysis'] != null
-      // --- FIX ---
-      // Cast the 'dynamic' type to the type we expect
+          // --- FIX ---
+          // Cast the 'dynamic' type to the type we expect
           ? AnalysisResult.fromJson(json['analysis'] as Map<String, dynamic>)
           : null,
     );
   }
 }
-
-
-

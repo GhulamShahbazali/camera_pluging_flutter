@@ -61,7 +61,7 @@ const Map<String, String> esES = {
   'protocol': 'PROTOCOLO',
   'and_result': 'Y RESULTADOS',
   'start_scan': 'INICIAR ESCANEO',
-  'processing': 'TRATAMIENTO...',
+  'processing': 'ANALIZANDO...',
   'usb_conection': 'DISPOSITIVO USB',
   'analyze_with_ai': 'ANALIZAR CON IA',
   'choose_how_to_scan': 'ELIGA COMO ESCANEAR',
