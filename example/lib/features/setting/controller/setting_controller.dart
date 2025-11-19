@@ -5,7 +5,6 @@ import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-
 import '../../../core/constants/app/app_assets.dart';
 import '../../../core/controllers/base_controller.dart';
 import '../../../core/services/device_activation_service.dart';
@@ -132,7 +131,10 @@ class SettingController extends BaseController {
                       child: Align(
                         alignment: Alignment.topRight,
                         child: InkWell(
-                          onTap: () => Navigator.of(context).pop(),
+                          onTap: () {
+                            Navigator.of(context).pop();
+                            Get.back();
+                          },
                           borderRadius: BorderRadius.circular(8),
                           child: Padding(
                             padding: const EdgeInsets.all(4),
