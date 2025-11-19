@@ -29,14 +29,14 @@ class ResultPage extends StatelessWidget {
           child: Column(
             children: [
               const SizedBox(height: 50),
-              const Align(
-                alignment: Alignment.topRight,
-                child: Padding(
-                  padding: EdgeInsets.only(right: 18),
-                  child: SettingIconWidget(),
-                ),
-              ),
 
+              // const Align(
+              //   alignment: Alignment.topRight,
+              //   child: Padding(
+              //     padding: EdgeInsets.only(right: 18),
+              //     child: SettingIconWidget(),
+              //   ),
+              // ),
               Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
@@ -182,7 +182,7 @@ class ResultPage extends StatelessWidget {
                         text: 'back_to_scan'.tr,
                         onTap: () {
                           controller.analysisResponse.analysis = null;
-                          Get.offAndToNamed(AppPages.scanPage);
+                          Get.back();
                         },
                         paddingHorizontal: 40,
                         paddingVertical: 11,
