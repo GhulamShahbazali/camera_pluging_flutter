@@ -69,13 +69,25 @@ const Map<String, String> esES = {
       'SELECCIONE UN MÉTODO PARA CARGAR O CAPTURAR SU ESCANEO.',
 
   // Result Page
-  'back_to_scan': 'Volver al escaneo',
+  'ask_a_question': 'HAZ UNA PREGUNTA',
   'analysis_summary': 'Analisis y Protocolos',
   'submitting_result': 'Enviando resultado...',
   'skin_color': 'Color de piel: @category (@value)',
   'hair_color': 'Color de cabello: @category (@value)',
   'hair_thickness': 'Grosor de cabello: @category (@value)',
   'confidence_follicles': 'Confianza: @conf% | Folículos: @foll',
+
+  // FAQ Bottom Sheet
+  'how_can_i_help_scan': '¿En qué puedo ayudarle con su escaneo',
+  'choose_question_or_formulate':
+      'Elige una pregunta o formula la tuya propia.',
+  'frequently_asked_questions': 'Preguntas frecuentes',
+  'faq_question_1': 'Como funciona la Depilacion Laser?',
+  'faq_question_2': 'Intervalos entre cada Sesion?',
+  'faq_question_3': 'Pacientes ideales para Resultados Permanentes?',
+  'faq_question_4':
+      'Cuantas sesiones se necesitan para una Depilacion Permanente?',
+  'write_question_here': 'Escribe tu pregunta aquí...',
 
   // Snackbar / Errors
   'activate_device_before_scanning':

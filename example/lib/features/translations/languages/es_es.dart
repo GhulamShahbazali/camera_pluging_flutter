@@ -62,7 +62,7 @@ const Map<String, String> esES = {
   'analyze_with_ai': 'ANALIZAR CON IA',
 
   // Result Page
-  'back_to_scan': 'Volver al escaneo',
+  'ask_a_question': 'HAZ UNA PREGUNTA',
   'analysis_summary': 'Resumen del análisis',
   'submitting_result': 'Enviando resultado...',
   'skin_color': 'Color de piel: @category (@value)',
@@ -70,16 +70,28 @@ const Map<String, String> esES = {
   'hair_thickness': 'Grosor de cabello: @category (@value)',
   'confidence_follicles': 'Confianza: @conf% | Folículos: @foll',
 
+  // FAQ Bottom Sheet
+  'how_can_i_help_scan': '¿En qué puedo ayudarle con su escaneo',
+  'choose_question_or_formulate':
+      'Elige una pregunta o formula la tuya propia.',
+  'frequently_asked_questions': 'Preguntas frecuentes',
+  'faq_question_1': 'Como funciona la Depilacion Laser?',
+  'faq_question_2': 'Intervalos entre cada Sesion?',
+  'faq_question_3': 'Pacientes ideales para Resultados Permanentes?',
+  'faq_question_4':
+      'Cuantas sesiones se necesitan para una Depilacion Permanente?',
+  'write_question_here': 'Escribe tu pregunta aquí...',
+
   // Snackbar / Errors
   'activate_device_before_scanning':
-  'Por favor, active el dispositivo en ajustes antes de escanear',
+      'Por favor, active el dispositivo en ajustes antes de escanear',
   'grant_photo_permission':
-  'Conceda permiso a la galería para seleccionar imágenes',
+      'Conceda permiso a la galería para seleccionar imágenes',
   'grant_camera_permission': 'Conceda permiso a la cámara para tomar fotos',
   'failed_take_photo': 'No se pudo tomar la foto',
   'failed_analyze_image': 'No se pudo analizar la imagen',
   'select_body_zone_before_scanning':
-  'Seleccione una zona del cuerpo antes de escanear',
+      'Seleccione una zona del cuerpo antes de escanear',
 
   // Error handler keys
   'timeout_error': 'Tiempo de espera agotado. Inténtelo de nuevo.',

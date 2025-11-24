@@ -1,22 +1,19 @@
 // ignore_for_file: eol_at_end_of_file, document_ignores
-
+import 'dart:io';
 import 'dart:async';
 import 'dart:developer';
-import 'dart:io';
-
-import 'package:flutter/foundation.dart' show kDebugMode;
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:flutter/material.dart';
+import '../../../routes/app_pages.dart';
 import 'package:image_picker/image_picker.dart';
+import '../../../core/widgets/custom_snackbar.dart';
+import '../../../core/services/analysis_service.dart';
+import 'package:device_info_plus/device_info_plus.dart';
+import 'package:flutter/foundation.dart' show kDebugMode;
+import 'package:usb_camera_plugin/usb_camera_plugin.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter_exif_rotation/flutter_exif_rotation.dart';
-import 'package:usb_camera_plugin/usb_camera_plugin.dart';
-
-import '../../../core/services/analysis_service.dart';
-import '../../../core/widgets/custom_snackbar.dart';
-import '../../../routes/app_pages.dart';
 
 class ScanController extends GetxController with WidgetsBindingObserver {
   final ImagePicker _picker = ImagePicker();

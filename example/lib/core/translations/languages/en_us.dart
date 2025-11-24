@@ -68,13 +68,23 @@ const Map<String, String> enUS = {
   'select_loading_method': 'SELECT A METHOD TO UPLOAD OR CAPTURE YOUR SCAN.',
 
   // Result Page
-  'back_to_scan': 'Back to scan',
+  'ask_a_question': 'ASK A QUESTION',
   'analysis_summary': 'Analysis summary',
   'submitting_result': 'Submitting result...',
   'skin_color': 'Skin color: @category (@value)',
   'hair_color': 'Hair color: @category (@value)',
   'hair_thickness': 'Hair thickness: @category (@value)',
   'confidence_follicles': 'Confidence: @conf% | Follicles: @foll',
+
+  // FAQ Bottom Sheet
+  'how_can_i_help_scan': 'How can I help you with your scan?',
+  'choose_question_or_formulate': 'Choose a question or formulate your own.',
+  'frequently_asked_questions': 'Frequently asked questions',
+  'faq_question_1': 'How does Laser Hair Removal work?',
+  'faq_question_2': 'Intervals between each Session?',
+  'faq_question_3': 'Ideal patients for Permanent Results?',
+  'faq_question_4': 'How many sessions are needed for Permanent Hair Removal?',
+  'write_question_here': 'Write your question here...',
 
   // Snackbar / Errors
   'activate_device_before_scanning':

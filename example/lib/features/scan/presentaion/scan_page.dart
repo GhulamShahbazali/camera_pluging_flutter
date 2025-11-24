@@ -110,7 +110,7 @@ void _showAdvancedBottomSheet(BuildContext context) {
     backgroundColor: Colors.transparent,
     builder: (BuildContext context) {
       return Container(
-        height: size.height * 0.33,
+        height: size.height * 0.34,
         decoration: BoxDecoration(
           image: DecorationImage(
             image: AssetImage(AppAssets.bottomsheetBg),

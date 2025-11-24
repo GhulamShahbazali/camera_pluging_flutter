@@ -3,10 +3,11 @@
 import 'dart:convert';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
-import '../../../routes/app_pages.dart';
+import 'package:usb_camera_plugin_example/core/constants/app/app_assets.dart';
+import 'package:usb_camera_plugin_example/core/widgets/inputs/send_text_field.dart';
+import 'package:usb_camera_plugin_example/features/body_area/controllers/bottom_sheet_controller.dart';
 import '../controller/result_controller.dart';
 import '../../../core/widgets/ultrascan4d.dart';
-import '../../../core/widgets/setting_icon.dart';
 import '../../body_area/widget/text_button.dart';
 import '../../../core/constants/ui/app_colors.dart';
 import '../../../core/api/models/analysis_response.dart';
@@ -179,10 +180,11 @@ class ResultPage extends StatelessWidget {
                   children: [
                     Expanded(
                       child: CustomTextButton(
-                        text: 'back_to_scan'.tr,
+                        text: 'ask_a_question'.tr,
                         onTap: () {
-                          controller.analysisResponse.analysis = null;
-                          Get.back();
+                          // controller.analysisResponse.analysis = null;
+                          _showAdvancedBottomSheet(context);
+                          // Get.back();
                         },
                         paddingHorizontal: 40,
                         paddingVertical: 11,
@@ -195,6 +197,177 @@ class ResultPage extends StatelessWidget {
             ],
           ),
         ),
+      ),
+    );
+  }
+}
+
+void _showAdvancedBottomSheet(BuildContext context) {
+  final size = MediaQuery.of(context).size;
+
+  // Initialize controller for this bottom sheet instance
+  // Using a unique tag to avoid conflicts
+  final tag = 'bottom_sheet_${DateTime.now().millisecondsSinceEpoch}';
+  final controller = Get.put(BottomSheetController(), tag: tag);
+
+  showModalBottomSheet(
+    context: context,
+    isScrollControlled: true,
+    shape: const RoundedRectangleBorder(
+      borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+    ),
+    backgroundColor: Colors.transparent,
+    builder: (BuildContext context) {
+      return _BottomSheetContent(size: size, controller: controller);
+    },
+  ).then((_) {
+    // Delay disposal to ensure any navigation completes first
+    // This prevents the TextEditingController from being disposed while still in use
+    Future.delayed(const Duration(milliseconds: 500), () {
+      if (Get.isRegistered<BottomSheetController>(tag: tag)) {
+        Get.delete<BottomSheetController>(tag: tag);
+      }
+    });
+  });
+}
+
+class _BottomSheetContent extends StatelessWidget {
+  final Size size;
+  final BottomSheetController controller;
+
+  const _BottomSheetContent({required this.size, required this.controller});
+
+  @override
+  Widget build(BuildContext context) {
+    final keyboardHeight = MediaQuery.of(context).viewInsets.bottom;
+    final bottomPadding = MediaQuery.of(context).padding.bottom;
+
+    return Padding(
+      padding: EdgeInsets.only(bottom: keyboardHeight),
+      child: Container(
+        constraints: BoxConstraints(maxHeight: size.height * 0.53),
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage(AppAssets.bottomsheetBg),
+            fit: BoxFit.cover,
+          ),
+          borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const SizedBox(height: 50),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Column(
+                children: [
+                  Text(
+                    'how_can_i_help_scan'.tr,
+                    style: AppTextStyles.body2.copyWith(
+                      color: AppColors.whiteColor,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    'choose_question_or_formulate'.tr,
+                    style: AppTextStyles.title1.copyWith(
+                      color: AppColors.goldColor,
+                      fontSize: 12,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 24),
+            // FAQ Section
+            Flexible(
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      'frequently_asked_questions'.tr,
+                      style: AppTextStyles.body2.copyWith(
+                        color: AppColors.whiteColor,
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    Obx(
+                      () => _buildFAQButton(
+                        context,
+                        'faq_question_1'.tr,
+                        () => controller.selectQuestion('faq_question_1'.tr),
+                        isLoading: controller.isLoading.value,
+                      ),
+                    ),
+                    const SizedBox(height: 12),
+                    Obx(
+                      () => _buildFAQButton(
+                        context,
+                        'faq_question_2'.tr,
+                        () => controller.selectQuestion('faq_question_2'.tr),
+                        isLoading: controller.isLoading.value,
+                      ),
+                    ),
+                    const SizedBox(height: 12),
+                    Obx(
+                      () => _buildFAQButton(
+                        context,
+                        'faq_question_3'.tr,
+                        () => controller.selectQuestion('faq_question_3'.tr),
+                        isLoading: controller.isLoading.value,
+                      ),
+                    ),
+                    const SizedBox(height: 12),
+                    Obx(
+                      () => _buildFAQButton(
+                        context,
+                        'faq_question_4'.tr,
+                        () => controller.selectQuestion('faq_question_4'.tr),
+                        isLoading: controller.isLoading.value,
+                      ),
+                    ),
+                    const SizedBox(height: 24),
+                  ],
+                ),
+              ),
+            ),
+            // Input Field and Send Button
+            Obx(
+              () => SendTextField(
+                controller: controller.questionController,
+                enabled: !controller.isLoading.value,
+                isLoading: controller.isLoading.value,
+                onSend: controller.sendQuestion,
+              ),
+            ),
+            SizedBox(height: bottomPadding),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildFAQButton(
+    BuildContext context,
+    String text,
+    VoidCallback onTap, {
+    required bool isLoading,
+  }) {
+    return GestureDetector(
+      onTap: isLoading ? null : onTap,
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 7),
+        decoration: BoxDecoration(
+          color: AppColors.transparentColor,
+          borderRadius: BorderRadius.circular(30),
+          border: Border.all(color: AppColors.gold300Color, width: 1),
+        ),
+        child: Text(text, style: AppTextStyles.title1.copyWith(fontSize: 12)),
       ),
     );
   }

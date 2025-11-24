@@ -39,6 +39,7 @@ dependencies:
   flutter_exif_rotation: ^0.5.1
   tflite_flutter: ^0.12.1
   image: ^3.3.0
+  flutter_gemini: ^3.0.0
 dev_dependencies:
   integration_test:
     sdk: flutter

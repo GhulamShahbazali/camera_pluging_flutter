@@ -9,6 +9,7 @@ class AppAssets {
   //bg
   static const String bg = '$bgPath/bg.png';
   static const String splashBg = '$bgPath/splashBg.png';
+  static const String sendTextFeildBg = '$bgPath/sendTextFeildBg.png';
   static const String deviceActivationBg = '$bgPath/deviceActivationBg.png';
 
   //dorsal
@@ -43,9 +44,12 @@ class AppAssets {
   static const String gallery = 'assets/icons/gallery.png';
   static const String circleBg = 'assets/icons/circleBg.png';
   static const String scanIcon = 'assets/icons/scanIcon.png';
-  static const String cameraIcon = 'assets/icons/cameraIcon.png';
+  static const String sendIcon = 'assets/icons/sendIcon.png';
   static const String closeIcon = 'assets/icons/closeIcon.png';
+  static const String cameraIcon = 'assets/icons/cameraIcon.png';
   static const String rejectIcon = 'assets/icons/rejectIcon.png';
+  static const String senderIcon = 'assets/icons/senderIcon.png';
+  static const String replierIcon = 'assets/icons/replierIcon.png';
   static const String settingIcon = 'assets/icons/settingIcon.png';
   static const String leftMoveIcon = 'assets/icons/leftMoveIcon.png';
   static const String activateIcon = 'assets/icons/activateIcon.png';

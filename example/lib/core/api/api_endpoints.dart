@@ -22,6 +22,11 @@ class ApiEndpoints {
   static String deviceActivation({required String macAddress}) =>
       '/UltraScan.php?Activacion=$macAddress';
 
+  // UltraScan API endpoints
+  static const String ultraScanApiBaseUrl = 'https://www.medicompras.com';
+  static String ultraScanApi({required String macAddress}) =>
+      '/UltraScan.php?API=$macAddress';
+
   // Add more endpoints as needed for your features
   // static const String bookings = '/bookings';
   // static const String drivers = '/drivers';
