@@ -194,7 +194,7 @@ class ScanController extends GetxController with WidgetsBindingObserver {
     if (mac == null || mac.isEmpty) {
       showCustomSnackbar(
         title: 'Activation required',
-        message: 'Please activate device in settings before scanning',
+        message: 'Please activate d evice in settings before scanning',
         type: SnackbarType.warning,
       );
       Get.toNamed(AppPages.settingPage);

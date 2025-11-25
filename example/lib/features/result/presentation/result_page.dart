@@ -20,6 +20,10 @@ class ResultPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Delete existing controller if it exists to ensure fresh data
+    if (Get.isRegistered<ResultController>()) {
+      Get.delete<ResultController>();
+    }
     final controller = Get.put(
       ResultController(analysisResponse: analysisResponse),
     );
@@ -71,6 +75,9 @@ class ResultPage extends StatelessWidget {
                           controller.analysisResponse.analysis!.annotatedImage!
                               .split(',')
                               .last,
+                        ),
+                        key: ValueKey(
+                          controller.analysisResponse.analysis!.annotatedImage,
                         ),
                         fit: BoxFit.cover,
                         gaplessPlayback: true,

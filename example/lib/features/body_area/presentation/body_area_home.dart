@@ -1,7 +1,6 @@
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:usb_camera_plugin_example/core/widgets/inputs/send_text_field.dart';
 
 import 'package:usb_camera_plugin_example/features/body_area/presentation/pages/back_page.dart';
 import 'package:usb_camera_plugin_example/features/body_area/presentation/pages/face_page.dart';
@@ -17,7 +16,6 @@ import '../../../core/widgets/ultrascan4d.dart';
 import '../../../routes/app_pages.dart';
 import '../controllers/back_controller.dart';
 import '../controllers/body_area_controller.dart';
-import '../controllers/bottom_sheet_controller.dart';
 import '../controllers/face_controller.dart';
 import '../controllers/frontal_controller.dart';
 import '../widget/text_button.dart';
