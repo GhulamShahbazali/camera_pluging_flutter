@@ -9,12 +9,16 @@ class UltraScanApiResponse {
   final String apiKey;
   final String projectNumber;
   final int rateLimit;
+  final String? systemInstruction;
+  final Map<String, dynamic>? dataContext;
 
   UltraScanApiResponse({
     required this.apiName,
     required this.apiKey,
     required this.projectNumber,
     required this.rateLimit,
+    this.systemInstruction,
+    this.dataContext,
   });
 
   factory UltraScanApiResponse.fromJson(Map<String, dynamic> json) {
@@ -23,6 +27,8 @@ class UltraScanApiResponse {
       apiKey: json['API_KEY'] ?? '',
       projectNumber: json['PROJECT_NUMBER'] ?? '',
       rateLimit: json['RATE_LIMIT'] ?? 0,
+      systemInstruction: json['SYSTEM_INSTRUCTION'] as String?,
+      dataContext: json['data_context'] as Map<String, dynamic>?,
     );
   }
 }

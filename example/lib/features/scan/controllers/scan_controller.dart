@@ -21,6 +21,7 @@ class ScanController extends GetxController with WidgetsBindingObserver {
 
   final Rx<File?> selectedImage = Rx<File?>(null);
   final RxBool isLoading = false.obs;
+  final RxBool isFromUsb = false.obs;
 
   static const String _macAddressKey = 'saved_mac_address';
   final _usbCameraPlugin = UsbCameraPlugin();
@@ -30,8 +31,6 @@ class ScanController extends GetxController with WidgetsBindingObserver {
   @override
   void onInit() {
     super.onInit();
-    // avoid heavy initialization that might auto-open camera in some devices
-    // _initPlatformState(); // removed / optional
     _ensureMacAddress();
     WidgetsBinding.instance.addObserver(this);
   }
@@ -43,13 +42,14 @@ class ScanController extends GetxController with WidgetsBindingObserver {
     super.onClose();
   }
 
-  // @override
-  // void didChangeAppLifecycleState(AppLifecycleState state) {
-  //   // When app resumes (comes back from camera) check once
-  //   if (state == AppLifecycleState.resumed) {
-  //     _checkForCapturedImage();
-  //   }
-  // }
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    // When app resumes (comes back from camera) check for captured image
+    if (state == AppLifecycleState.resumed) {
+      // Check immediately when app resumes
+      _checkForCapturedImage();
+    }
+  }
 
   Future<void> _ensureMacAddress() async {
     final prefs = await SharedPreferences.getInstance();
@@ -137,6 +137,7 @@ class ScanController extends GetxController with WidgetsBindingObserver {
 
       if (image != null) {
         selectedImage.value = File(image.path);
+        isFromUsb.value = false;
       }
     } catch (e) {
       log('Failed to select image: $e');
@@ -174,6 +175,7 @@ class ScanController extends GetxController with WidgetsBindingObserver {
 
       if (image != null) {
         selectedImage.value = File(image.path);
+        isFromUsb.value = false;
         log('Photo taken successfully');
       }
     } catch (e) {
@@ -227,6 +229,7 @@ class ScanController extends GetxController with WidgetsBindingObserver {
           }
 
           selectedImage.value = imageFile;
+          isFromUsb.value = true;
 
           if (kDebugMode) {
             print('✅ Image set to selectedImage - Ready for analysis');
@@ -269,8 +272,9 @@ class ScanController extends GetxController with WidgetsBindingObserver {
       // This won't block the UI and will stop as soon as image is found or after timeout.
       _cameraPollTimer?.cancel();
       int attempts = 0;
-      const maxAttempts = 20; // 20 * 300ms = 6 seconds max
-      _cameraPollTimer = Timer.periodic(const Duration(milliseconds: 300), (
+      const maxAttempts =
+          60; // 60 * 500ms = 30 seconds max (user needs time to capture)
+      _cameraPollTimer = Timer.periodic(const Duration(milliseconds: 500), (
         timer,
       ) async {
         attempts++;
@@ -287,6 +291,13 @@ class ScanController extends GetxController with WidgetsBindingObserver {
               );
             }
           }
+        }
+      });
+
+      // Also check immediately after a short delay (in case image is already available)
+      Future.delayed(const Duration(milliseconds: 1000), () {
+        if (selectedImage.value == null) {
+          _checkForCapturedImage();
         }
       });
     } catch (e) {
@@ -326,6 +337,7 @@ class ScanController extends GetxController with WidgetsBindingObserver {
 
   void clearSelectedImage() {
     selectedImage.value = null;
+    isFromUsb.value = false;
   }
 
   Future<void> analyzeSelectedImage() async {

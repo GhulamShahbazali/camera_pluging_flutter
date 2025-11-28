@@ -127,44 +127,15 @@ class ResultPage extends StatelessWidget {
                     children: [
                       Text(
                         'analysis_summary'.tr,
-                        style: AppTextStyles.heading4,
+                        style: AppTextStyles.heading4.copyWith(
+                          color: AppColors.whiteColor,
+                          fontSize: 32,
+                        ),
                       ),
                       const SizedBox(height: 4),
 
                       const SizedBox(height: 4),
-                      if (controller.analysisResponse.analysis!.hairColor !=
-                          null)
-                        Text(
-                          'hair_color'.trParams({
-                            'category':
-                                '${controller.analysisResponse.analysis!.hairColor!.name}',
-                            'value':
-                                '${controller.analysisResponse.analysis!.hairColor!.value?.toStringAsFixed(1)}',
-                          }),
-                          style: AppTextStyles.body2,
-                        ),
-                      if (controller.analysisResponse.analysis!.hairThickness !=
-                          null)
-                        Text(
-                          'hair_thickness'.trParams({
-                            'category':
-                                '${controller.analysisResponse.analysis!.hairThickness!.name}',
-                            'value':
-                                '${controller.analysisResponse.analysis!.hairThickness!.value?.toStringAsFixed(1)}',
-                          }),
-                          style: AppTextStyles.body2,
-                        ),
-                      if (controller.analysisResponse.analysis!.skinColor !=
-                          null)
-                        Text(
-                          'skin_color'.trParams({
-                            'category':
-                                '${controller.analysisResponse.analysis!.skinColor!.name}',
-                            'value':
-                                '${controller.analysisResponse.analysis!.skinColor!.value?.toStringAsFixed(1)}',
-                          }),
-                          style: AppTextStyles.body2,
-                        ),
+
                       const SizedBox(height: 8),
                       Obx(
                         () => Text(

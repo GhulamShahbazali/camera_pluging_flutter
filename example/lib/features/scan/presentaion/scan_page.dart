@@ -1,9 +1,9 @@
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:usb_camera_plugin_example/core/constants/index.dart';
-import 'package:usb_camera_plugin_example/core/constants/ui/app_text_styles.dart';
 import 'package:usb_camera_plugin_example/features/scan/widgets/bottomsheet_cicular.dart';
 
 import '../../../core/constants/app/app_assets.dart';
@@ -13,23 +13,42 @@ import '../../../core/widgets/ultrascan4d.dart';
 import '../controllers/scan_controller.dart';
 import '../widgets/circule_container.dart';
 
-class ScanPage extends StatelessWidget {
+class ScanPage extends StatefulWidget {
   const ScanPage({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    final controller = Get.put(ScanController());
-    final size = MediaQuery.sizeOf(context);
+  State<ScanPage> createState() => _ScanPageState();
+}
 
+class _ScanPageState extends State<ScanPage> {
+  late ScanController controller;
+
+  @override
+  void initState() {
+    super.initState();
+    // Get.put will reuse existing controller instance if it exists
+    // This ensures state persists across hot reloads
+    if (Get.isRegistered<ScanController>()) {
+      controller = Get.find<ScanController>();
+    } else {
+      controller = Get.put(ScanController());
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final size = MediaQuery.sizeOf(context);
+    log(controller.selectedImage.value.toString());
     return Obx(
       () => Scaffold(
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
         body: Stack(
           children: [
             BackgroundContainer(
+              isImage: controller.selectedImage.value == null,
               child: Column(
                 children: [
-                  const SizedBox(height: 80),
+                  const SizedBox(height: 50),
                   const Align(
                     alignment: Alignment.topRight,
                     child: Padding(
@@ -39,6 +58,8 @@ class ScanPage extends StatelessWidget {
                   ),
                   const SizedBox(height: 10),
                   const Ultrascan4d(),
+                  const Spacer(),
+
                   if (controller.selectedImage.value == null) ...[
                     const Spacer(),
                     CirculeContainer(
@@ -51,18 +72,26 @@ class ScanPage extends StatelessWidget {
                     const Spacer(),
                     const Spacer(),
                   ] else
-                    SizedBox(
-                      height: size.height * 0.725,
-                      width: size.width,
-                      child: Image.file(
-                        File(controller.selectedImage.value!.path),
-                        fit: BoxFit.cover,
-                        errorBuilder: (context, error, stackTrace) {
-                          return const Center(child: Text('Image load error'));
-                        },
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 60),
+                      child: Obx(
+                        () => Image.file(
+                          File(controller.selectedImage.value!.path),
+                          height: controller.isFromUsb.value
+                              ? null
+                              : size.height * 0.75,
+                          fit: BoxFit.fitWidth,
+                          width: size.width,
+                          errorBuilder: (context, error, stackTrace) {
+                            return const Center(
+                              child: Text('Image load error'),
+                            );
+                          },
+                        ),
                       ),
                     ),
-                  const SizedBox(height: 30),
+                  // const SizedBox(height: 30),
+                  const Spacer(),
                 ],
               ),
             ),

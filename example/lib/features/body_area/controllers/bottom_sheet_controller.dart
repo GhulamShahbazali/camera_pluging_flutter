@@ -47,15 +47,17 @@ class BottomSheetController extends GetxController {
 
       // Close bottom sheet first
       Get.back(); // Close bottom sheet
-      
+
       // Small delay to ensure bottom sheet animation completes before navigation
       await Future.delayed(const Duration(milliseconds: 200));
-      
+
       // Navigate to ChatScreen
       Get.to(
         () => ChatScreen(
           initialQuestion: question,
           geminiApiKey: apiResponse.apiKey,
+          systemInstruction: apiResponse.systemInstruction,
+          dataContext: apiResponse.dataContext,
         ),
       );
     } on DioException catch (e) {
@@ -91,4 +93,3 @@ class BottomSheetController extends GetxController {
     super.onClose();
   }
 }
-

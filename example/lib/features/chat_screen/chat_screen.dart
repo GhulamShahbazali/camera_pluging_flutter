@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_single_quotes, document_ignores, prefer_int_literals, eol_at_end_of_file
 
+import 'dart:convert';
 import 'dart:developer';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -27,8 +28,16 @@ class ChatMessage {
 class ChatScreen extends StatefulWidget {
   final String? initialQuestion;
   final String? geminiApiKey;
+  final String? systemInstruction;
+  final Map<String, dynamic>? dataContext;
 
-  const ChatScreen({super.key, this.initialQuestion, this.geminiApiKey});
+  const ChatScreen({
+    super.key,
+    this.initialQuestion,
+    this.geminiApiKey,
+    this.systemInstruction,
+    this.dataContext,
+  });
 
   @override
   State<ChatScreen> createState() => _ChatScreenState();
@@ -126,45 +135,36 @@ class _ChatScreenState extends State<ChatScreen> {
     String responseText;
     if (_isGeminiInitialized) {
       try {
-        // Create medical/hair scanning assistant prompt
-        final prompt =
-            """You are a professional and knowledgeable medical assistant specialized in hair and scalp health analysis, dermatology, and trichology. You are part of the UltraScan 4D app that helps users track and analyze their hair and scalp condition through advanced scanning technology.
+        // Build prompt using system instruction and data context from API
+        final StringBuffer promptBuffer = StringBuffer();
 
-Your expertise includes:
+        // Add system instruction if provided
+        if (widget.systemInstruction != null &&
+            widget.systemInstruction!.isNotEmpty) {
+          promptBuffer.writeln(widget.systemInstruction!);
+        }
 
-- Hair and scalp health analysis and diagnosis
-- Hair loss conditions (alopecia, pattern baldness, etc.)
-- Scalp conditions (dandruff, psoriasis, seborrheic dermatitis, etc.)
-- Hair follicle health and density
-- Treatment recommendations for hair and scalp issues
-- Hair care routines and maintenance
-- Understanding scan results and hair analysis data
-- General dermatology and trichology information
-- When to seek professional medical care for hair/scalp issues
+        // Add data context if provided
+        if (widget.dataContext != null && widget.dataContext!.isNotEmpty) {
+          final dataContextJson = const JsonEncoder.withIndent(
+            '  ',
+          ).convert(widget.dataContext);
+          promptBuffer.writeln(
+            '\n=== INFORMACIÓN TÉCNICA Y CLÍNICA DISPONIBLE ===',
+          );
+          promptBuffer.writeln(dataContextJson);
+          promptBuffer.writeln(
+            '=== FIN DE LA INFORMACIÓN TÉCNICA Y CLÍNICA ===\n',
+          );
+        }
 
-Guidelines for responses:
+        // Add user question
+        promptBuffer.writeln('Consulta del usuario: $userMessage');
+        promptBuffer.writeln(
+          '\nProporciona una respuesta completa y precisa basada únicamente en la información proporcionada.',
+        );
 
-1. ONLY answer questions related to hair health, scalp conditions, hair analysis, scan results, dermatology, trichology, or general wellness related to hair care
-
-2. If the question is NOT hair/scalp/health-related, politely say: "I'm designed to help with hair and scalp health questions only. Please ask me about hair analysis, scalp conditions, scan results, or hair care. For general questions, please use other resources."
-
-3. Provide accurate, evidence-based information in simple, clear language
-
-4. Always include important disclaimers: "This is informational only. Consult your healthcare provider or dermatologist for personalized medical advice."
-
-5. For emergency situations or severe scalp conditions, clearly advise seeking immediate medical attention
-
-6. Be empathetic, professional, and supportive in your tone
-
-7. Use medical terminology appropriately but explain complex terms
-
-8. Provide actionable, practical advice when appropriate
-
-9. Consider the context of a hair scanning app - users may ask about scan results, hair density, follicle health, treatment options, or maintenance routines
-
-Current question from user: $userMessage
-
-Provide a comprehensive, helpful, and medically accurate response:""";
+        final prompt = promptBuffer.toString();
 
         // Generate response using flutter_gemini
         final response = await Gemini.instance.prompt(
