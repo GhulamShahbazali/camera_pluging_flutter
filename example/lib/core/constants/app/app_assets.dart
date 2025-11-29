@@ -1,10 +1,11 @@
 class AppAssets {
   //path
-  static const String path = 'assets/images';
-  static const String bgPath = '$path/bg';
-  static const String facePath = '$path/face';
-  static const String dorsalPath = '$path/dorsal';
-  static const String frontalPath = '$path/frontal';
+  static const String imagesPath = 'assets/images';
+  static const String iconsPath = 'assets/icons';
+  static const String bgPath = '$imagesPath/bg';
+  static const String facePath = '$imagesPath/face';
+  static const String dorsalPath = '$imagesPath/dorsal';
+  static const String frontalPath = '$imagesPath/frontal';
 
   //bg
   static const String bg = '$bgPath/bg.png';
@@ -36,24 +37,24 @@ class AppAssets {
   static const String lowerLeg = '$frontalPath/lowerLeg.png';
 
   //image
-  static const String banner = '$path/banner.png';
-  static const String ultraScanMachine = '$path/ultraScanMachine.png';
-  static const String initializingBanner = '$path/initalizingBanner.png';
+  static const String banner = '$imagesPath/banner.png';
+  static const String ultraScanMachine = '$imagesPath/ultraScanMachine.png';
+  static const String initializingBanner = '$imagesPath/initalizingBanner.png';
 
   //icons
-  static const String gallery = 'assets/icons/gallery.png';
-  static const String circleBg = 'assets/icons/circleBg.png';
-  static const String scanIcon = 'assets/icons/scanIcon.png';
-  static const String sendIcon = 'assets/icons/sendIcon.png';
-  static const String closeIcon = 'assets/icons/closeIcon.png';
-  static const String cameraIcon = 'assets/icons/cameraIcon.png';
-  static const String rejectIcon = 'assets/icons/rejectIcon.png';
-  static const String senderIcon = 'assets/icons/senderIcon.png';
-  static const String replierIcon = 'assets/icons/replierIcon.png';
-  static const String settingIcon = 'assets/icons/settingIcon.png';
-  static const String leftMoveIcon = 'assets/icons/leftMoveIcon.png';
-  static const String activateIcon = 'assets/icons/activateIcon.png';
-  static const String usbConnection = 'assets/icons/usbConnection.png';
-  static const String rightMoveIcon = 'assets/icons/rightMoveIcon.png';
-  static const String bottomsheetBg = 'assets/icons/bottomsheet_bg.png';
+  static const String gallery = '$iconsPath/gallery.png';
+  static const String circleBg = '$iconsPath/circleBg.png';
+  static const String scanIcon = '$iconsPath/scanIcon.png';
+  static const String sendIcon = '$iconsPath/sendIcon.png';
+  static const String closeIcon = '$iconsPath/closeIcon.png';
+  static const String cameraIcon = '$iconsPath/cameraIcon.png';
+  static const String rejectIcon = '$iconsPath/rejectIcon.png';
+  static const String senderIcon = '$iconsPath/senderIcon.png';
+  static const String replierIcon = '$iconsPath/replierIcon.png';
+  static const String settingIcon = '$iconsPath/settingIcon.png';
+  static const String leftMoveIcon = '$iconsPath/leftMoveIcon.png';
+  static const String activateIcon = '$iconsPath/activateIcon.png';
+  static const String usbConnection = '$iconsPath/usbConnection.png';
+  static const String rightMoveIcon = '$iconsPath/rightMoveIcon.png';
+  static const String bottomsheetBg = '$iconsPath/bottomsheet_bg.png';
 }

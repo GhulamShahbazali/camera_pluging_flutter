@@ -288,7 +288,7 @@ class _ChatScreenState extends State<ChatScreen> {
                               timestamp: _formatTime(msg.timestamp),
                             );
                           }
-                        }).toList(),
+                        }),
                         const SizedBox(height: 20),
                       ],
                     ),

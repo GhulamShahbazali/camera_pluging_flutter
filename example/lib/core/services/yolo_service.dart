@@ -405,16 +405,16 @@ extension CustomReshape on List {
         'Total elements in list ($length) does not match shape ($totalElements)',
       );
     }
-    dynamic _build(int dim, Iterator<dynamic> iter) {
+    dynamic build(int dim, Iterator<dynamic> iter) {
       if (dim == shape.length - 1) {
         return List.generate(
           shape[dim],
           (_) => iter.moveNext() ? iter.current : null,
         );
       }
-      return List.generate(shape[dim], (_) => _build(dim + 1, iter));
+      return List.generate(shape[dim], (_) => build(dim + 1, iter));
     }
 
-    return _build(0, iterator) as List<dynamic>;
+    return build(0, iterator) as List<dynamic>;
   }
 }
